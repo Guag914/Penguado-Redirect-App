@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/v6hRy4d3/Penguado-Favicon-Bright.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penguado Profile (Blue/Green Theme)</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(45deg, #1abc9c, #00acc1);
+      color: #00695c;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    /* Animated Gradient Background */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, #1abc9c, #00acc1, #00897b);
+      animation: spinWave 18s linear infinite;
+      filter: blur(140px) opacity(0.85);
+      z-index: 0;
+    }
+
+    @keyframes spinWave {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #alert-box {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1abc9c;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-family: 'Roboto', Arial, sans-serif;
+      box-shadow: 0 5px 15px rgba(26, 188, 156, 0.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+      max-width: 90vw;
+      text-align: center;
+    }
+    #alert-box.show { opacity: 1; pointer-events: auto; }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #FFFFFF;
+      z-index: 9999;
+    }
+    header h1 { font-size: 3rem; margin: 0; }
+
+    main {
+      background: #e0f7f7;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 30px;
+      align-items: start;
+      z-index: 9999;
+    }
+
+    .pic-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #profilePic {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(26, 188, 156, 0.15);
+      object-fit: cover;
+    }
+    #uploadPic { display: none; }
+    .upload-btn {
+      margin-top: 15px;
+      padding: 10px 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: linear-gradient(90deg,#1abc9c, #00acc1);
+      color: white;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 3px 6px rgba(38, 198, 218, 0.7);
+      user-select: none;
+    }
+    .upload-btn:hover, .upload-btn:focus {
+      background: linear-gradient(90deg, #00acc1, #00897b);
+      box-shadow: 0 5px 12px rgba(0, 172, 193, 0.9);
+      outline: none;
+    }
+
+    .uploading-spinner {
+      margin-top: 15px;
+      width: 28px;
+      height: 28px;
+      border: 4px solid rgba(0, 172, 193, 0.3);
+      border-top-color: #26c6da;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .info-section { color: #00695c; }
+    .info-section h2 { margin-top: 0; font-weight: 700; font-size: 2.2rem; }
+    .info-section p.uuid {
+      font-size: 1.1rem;
+      margin: 6px 0 20px 0;
+      color: #00695c;
+      font-family: monospace;
+    }
+
+    .history-section {
+      grid-column: 1 / -1;
+      background: rgba(0, 172, 193, 0.07);
+      border-radius: 12px;
+      padding: 20px;
+      color: #00695c;
+    }
+    .history-section h3 {
+      margin-top: 0;
+      color: #00acc1;
+      font-weight: 700;
+    }
+    .history-list {
+      max-height: 160px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+    .history-item {
+      background: rgba(26, 188, 156, 0.15);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #26c6da;
+    }
+    
+html, body {
+    overflow: hidden; /* 🚫 disables scrollbars */
+    width: 100%;
+}
+
+    #updateStatus {
+      margin-top: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #b2dfdb;
+      min-height: 24px;
+      text-shadow: 0 0 4px #00acc1;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Penguado Profile</h1>
+  </header>
+
+  <main>
+    <section class="pic-section">
+      <img id="profilePic" src="https://via.placeholder.com/140x140?text=Penguado" alt="Profile">
+      <input type="file" id="uploadPic" accept="image/*">
+      <button class="upload-btn" onclick="document.getElementById('uploadPic').click()">Change Picture</button>
+      <div class="uploading-spinner" id="uploadSpinner"></div>
+      <div id="updateStatus" role="alert" aria-live="polite"></div>
+    </section>
+
+    <section class="info-section">
+      <h2 id="username">Loading...</h2>
+      <p class="uuid" id="uuid"></p>
+    </section>
+
+    <section class="history-section">
+      <h3>Activity History</h3>
+      <div id="historyList" class="history-list">
+        <p>Loading history...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>More features coming soon — friends, chats, settings, and more!</p>
+  </footer>
+
+  <div id="alert-box"></div>
+
+  <script>
+    // Resize & compress image
+    function resizeImage(file, maxWidth, maxHeight, callback) {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = e => {
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+          callback(dataUrl);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Load user data
+    const userData = JSON.parse(localStorage.getItem("penguadoUser"));
+    if (!userData) {
+      document.body.innerHTML = "<h1 style='color:white;text-align:center;'>Login Failed. Please Try Again Later</h1>";
+      throw new Error("No user data found");
+    }
+    document.getElementById("username").textContent = userData.name;
+    document.getElementById("uuid").textContent = "UUID: " + userData.uuid;
+
+    const profilePic = document.getElementById("profilePic");
+    const storedPic = localStorage.getItem("profilePic");
+    profilePic.src = storedPic || "https://via.placeholder.com/140x140?text=Penguado";
+
+    const uploadSpinner = document.getElementById("uploadSpinner");
+    const updateStatus = document.getElementById("updateStatus");
+
+    document.getElementById("uploadPic").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      updateStatus.textContent = "";
+      uploadSpinner.style.display = "inline-block";
+
+      resizeImage(file, 300, 300, (dataUrl) => {
+        profilePic.src = dataUrl;
+        try {
+          localStorage.setItem("profilePic", dataUrl);
+        } catch (err) {
+          console.warn("Could not save profile picture in localStorage.");
+        }
+        uploadSpinner.style.display = "none";
+        updateStatus.textContent = "Profile picture updated!";
+      });
+    });
+
+    function loadHistory(uuid) {
+      const endpoint = `https://script.google.com/macros/s/AKfycbxxnPCaQ1cnQ5n_5oLVgWBRnsL_sM5n8xqiXjPc4wHIt7i0zzgBWjVi3A_eUMEBzNhIng/exec?method=getHistory&uuid=${encodeURIComponent(uuid)}`;
+      fetch(endpoint)
+        .then(res => res.json())
+        .then(data => {
+          const historyList = document.getElementById("historyList");
+          historyList.innerHTML = "";
+          if (!data.success || !data.history || data.history.length === 0) {
+            historyList.innerHTML = "<p>No history found.</p>";
+            return;
+          }
+          data.history.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "history-item";
+            div.textContent = `${item.action} | Date & Time: ${item.time}`;
+            historyList.appendChild(div);
+          });
+        })
+        .catch(err => {
+          const historyList = document.getElementById("historyList");
+          historyList.innerHTML = "<p>Failed to load history.</p>";
+          console.error(err);
+        });
+    }
+
+    loadHistory(userData.uuid);
+
+    function showAlert(message, duration = 3000) {
+      const alertBox = document.getElementById("alert-box");
+      alertBox.textContent = message;
+      alertBox.classList.add("show");
+      clearTimeout(alertBox._timeout);
+      alertBox._timeout = setTimeout(() => {
+        alertBox.classList.remove("show");
+      }, duration);
+    }
+  </script>
+
+</body>
+</html>
