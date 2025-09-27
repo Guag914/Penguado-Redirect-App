@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/v6hRy4d3/Penguado-Favicon-Bright.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Penguado UUID (Blue/Green Theme)</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Roboto', Arial, sans-serif;
+      color: #00695c; /* aquatic green text */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated Gradient Background */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        #1abc9c, 
+        #1abc9c 90deg,
+        #1abc9c 180deg,
+        #00897b 270deg
+      );
+      animation: spinWave 18s linear infinite;
+      filter: blur(140px) opacity(0.85);
+      z-index: 0;
+    }
+
+    @keyframes spinWave {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Container */
+    #container {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+      max-width: 500px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Fade-in Animations */
+    .hidden { display: none; }
+
+    h2, .proceed-text, #output {
+      margin: 0.5em 0;
+      opacity: 0;
+      animation: fadeInText 2s ease-in-out forwards;
+      position: relative;
+    }
+
+    h2 {
+      font-size: 2em;
+      color: #1abc9c;
+      animation-delay: 0.3s;
+    }
+
+    .proceed-text {
+      font-size: 1.2em;
+      font-weight: normal;
+      color: #00897b;
+      animation-delay: 1s;
+    }
+
+    #output {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #00695c;
+      animation-delay: 1.8s;
+    }
+
+    /* Buttons */
+    .button-row {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-around;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .button-row a {
+      padding: 12px 25px;
+      border-radius: 12px;
+      background: #1abc9c;
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .button-row a:hover {
+      background: #00897b;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h2 id="mainMessage">Checking login...</h2>
+    <div class="proceed-text hidden" id="proceedMessage">
+      Refresh the page to finish the login.
+    </div>
+    <div id="output"></div>
+
+    <!-- Button Row -->
+    <div class="button-row hidden" id="buttonRow">
+      <a href="https://sites.google.com/westfordk12.us/a-penguado-lll-bms/d-mes-path-g" target="_blank">Games</a>
+      <a href="https://sites.google.com/westfordk12.us/a-penguado-lll-bms/d-mes-path-a" target="_blank">Apps</a>
+      <a href="https://sites.google.com/westfordk12.us/a-penguado-lll-bms/d-mes-path-v" target="_blank">Video Player</a>
+    </div>
+  </div>
+
+  <script>
+    const userData = JSON.parse(localStorage.getItem("penguadoUser"));
+    const output = document.getElementById("output");
+    const proceedMessage = document.getElementById("proceedMessage");
+    const mainMessage = document.getElementById("mainMessage");
+    const buttonRow = document.getElementById("buttonRow");
+
+    if (userData) {
+      mainMessage.textContent = "You may now proceed to any of the Penguado Services.";
+      output.textContent = "Welcome! " + userData.name;
+      proceedMessage.classList.remove("hidden");
+      buttonRow.classList.remove("hidden");
+    } else {
+      mainMessage.textContent = "You may now proceed to any of the Penguado Services.";
+      output.textContent = "Welcome! " + userData.name;
+      proceedMessage.classList.remove("hidden");
+      buttonRow.classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
