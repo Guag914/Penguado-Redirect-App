@@ -1,234 +1,378 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Penguado Login</title>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/v6hRy4d3/Penguado-Favicon-Bright.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Penguado Proxy (Blue/Green Theme)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Roboto', Arial, sans-serif;
-      background: linear-gradient(to bottom right, #FFFFFF, #FFFFFF);
-      color: white;
-      margin: 0; padding: 0;
-      overflow: hidden;
-      user-select: none;
-    }
+  font-family: 'Roboto', Arial, sans-serif;
+  text-align: center;
+  background: #ffffff;
+  color: #00695c; /* aquatic green text */
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+}
     
-    #loading-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 9998;
-      justify-content: center;
-      align-items: center;
-    }
 
-    #loading-overlay.active {
-      display: flex;
-    }
 
-    .spinner {
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid #ff4500;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
+#welcome-msg {
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #00695c;
+}
     
-    #alert-box {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #ff4500;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 25px;
-      font-weight: 700;
-      font-family: 'Roboto', Arial, sans-serif;
-      box-shadow: 0 5px 15px rgba(255, 69, 0, 0.7);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 9999;
-      max-width: 90vw;
-      text-align: center;
-    }
-    #alert-box.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
+     
 
-    
-    #login-section {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: linear-gradient(to right, #ff4500, #ff6347);
-      padding: 40px 60px;
-      border-radius: 22.5px;
-      box-shadow: 0 9px 22.5px rgba(0, 0, 0, 0.3);
-      width: 350px;
-      color: white;
-      text-align: center;
-    }
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 14px 15px;
-      font-size: 18px;
-      border-radius: 15px;
-      border: none;
-      box-sizing: border-box;
-      margin-bottom: 20px;
-    }
-    button {
-      width: 100%;
-      padding: 15px 0;
-      font-size: 24px;
-      font-weight: 700;
-      color: white;
-      background: #ff4500;
-      border: none;
-      border-radius: 22.5px;
-      cursor: pointer;
-      box-shadow: 0 9px 22.5px rgba(0, 0, 0, 0.3);
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background: #ff2200;
-      box-shadow: 0 12px 30px rgba(255, 34, 0, 0.6);
-    }
+.login-name {
+  color: white; 
+  background: linear-gradient(to right, #1abc9c,#00acc1); 
+  font-weight: bold;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#login-section {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.96);
+  padding: 40px 60px;
+  border-radius: 22.5px;
+  box-shadow: 0 15px 45px rgba(0,172,193,0.35);
+  width: 350px;
+  color: #00695c;
+  z-index: 1;
+}
+
+#error-msg {
+  color: #b2dfdb;
+  font-weight: 600;
+  height: 24px;
+  margin-top: 5px;
+}
+
+.button-container,
+.dropdown,
+#gameFrameContainer,
+#back-button {
+  display: none;
+}
+
+.visible { display: block !important; }
+
+.button-container {
+  position: absolute;
+  top: 45px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.75);
+  background: linear-gradient(to right, #1abc9c, #00acc1);
+  padding: 30px 90px;
+  border-radius: 22.5px;
+  box-shadow: 0 9px 22.5px rgba(0, 172, 193, 0.3);
+  color: white;
+}
+
+.url-input {
+  padding: 21px 45px;
+  font-size: 30px;
+  border-radius: 15px;
+  border: none;
+  margin-bottom: 30px;
+  width: 600px;
+  max-width: 100%;
+}
+
+.game-button {
+  background: linear-gradient(to right,#00a5c0, #158f8a);
+  color: white;
+  padding: 30px 75px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, background 0.3s ease;
+  border-radius: 22.5px;
+  font-size: 36px;
+  font-weight: bold;
+  box-shadow: 0 9px 22.5px rgba(0, 172, 193, 0.3);
+}
+
+.game-button::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 6px;
+  background: white;
+  top: 0;
+  left: -100%;
+  transition: left 0.3s ease-in-out;
+  box-shadow: 0 0 30px white;
+}
+
+.game-button:hover::after {
+  left: 0;
+}
+
+.game-button:hover {
+  transform: scale(1.15);
+  background: linear-gradient(to right, #00897b, #26c6da);
+  box-shadow: 0 12px 30px rgba(38, 198, 218, 0.5);
+}
+
+.back-button {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 5px 5px;
+  background: rgba(0, 172, 193, 0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 0 5px 5px 5px;
+  z-index: 11;
+}
+
+.back-button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(to right, #00897b, #26c6da);
+  box-shadow: 0 7.5px 18px rgba(38, 198, 218, 0.5);
+}
+
+#gameFrameContainer {
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+
+.dropdown {
+  position: absolute;
+  top: 300px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+.small-button {
+  background: linear-gradient(to right, #1abc9c, #00acc1);
+  color: white;
+  padding: 15px 40px;
+  border: none;
+  cursor: pointer;
+  border-radius: 18px;
+  font-size: 22px;
+  font-weight: 800;
+  box-shadow: 0 8px 20px rgba(0, 172, 193, 0.4);
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.small-button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(to right, #00897b, #26c6da);
+  box-shadow: 0 12px 30px rgba(38, 198, 218, 0.6);
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  color: #00695c;
+  min-width: 180px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 15;
+  border-radius: 12px;
+  top: 60px;
+  left: 0;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.dropdown-content button {
+  background: none;
+  border: none;
+  color: #00695c;
+  padding: 12px 20px;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+
+.dropdown-content button:hover {
+  background-color: #e0f7f7;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Password input and submit button */
+#accessPassword {
+  width: 85%;
+  padding: 15px 20px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: none;
+  margin-bottom: 15px;
+}
+
+#submitPassword {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 20px;
+  border-radius: 22.5px;
+  border: none;
+  background: linear-gradient(to right, #1abc9c, #00acc1);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+#submitPassword:hover {
+  background: linear-gradient(to right, #00897b, #26c6da);
+  color: white;
+}
+
   </style>
 </head>
 <body>
   <div id="login-section">
-    <h2>Login</h2>
-    <input id="email" placeholder="Email" type="email" autocomplete="email"><br>
-    <input id="password" placeholder="Password" type="password" autocomplete="current-password"><br>
-    <button onclick="login()">Login</button>
+    <h2></h2>
   </div>
 
-  <script>
-const LOGIN_URL = "https://script.google.com/macros/s/AKfycbzriyZzh-gub5axf9cX3H8GQO-rFwLTAKa67m-z2utNGI0qKdBNNf_5svwSk-qBgcU5qg/exec";
+  <div class="button-container">
+    <input type="text" class="url-input" id="urlInput" placeholder="Enter game URL here..." />
+    <br />
+    <button class="game-button" onclick="launchGame()">Launch Penguado Proxy</button>
+  </div>
 
-async function sha256(message) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  <div class="dropdown">
+    <button class="small-button">Launch Google ▼</button>
+    <div class="dropdown-content">
+      <button onclick="launchGoogleV1()">Raw Embed V1</button>
+      <button onclick="launchGoogleV2()">Raw Embed V2</button>
+    </div>
+  </div>
+
+  <div id="gameFrameContainer"></div>
+  <button id="back-button" class="back-button" onclick="goBack()">Back</button>
+    <div id="output"></div>
+
+  <div id="welcome-msg"></div>
+
+<script>
+function showMainUI(userName) {
+  document.getElementById("login-section").style.display = "none";
+  document.querySelector(".button-container").classList.add("visible");
+  document.querySelector(".dropdown").classList.add("visible");
+
+  const welcomeEl = document.getElementById("welcome-msg");
+  if (welcomeEl) {
+    welcomeEl.textContent = `Welcome, ${userName}!`;
+  }
 }
 
-async function getIP() {
+function checkAccess() {
+  let userData = null;
   try {
-    const res = await fetch('https://api.ipify.org?format=json');
-    const data = await res.json();
-    return data.ip;
-  } catch {
-    return "0.0.0.0";
+    userData = JSON.parse(localStorage.getItem("penguadoUser"));
+  } catch (e) {
+    console.error("Invalid penguadoUser format:", e);
+  }
+
+  if (userData && userData.uuid && userData.name) {
+    showMainUI(userData.name);
+  } else {
+    window.location.href = "https://html.cafe/x836352e3";
   }
 }
 
-function generateUUID() {
-  if (localStorage.getItem("penguadoUUID")) {
-    return localStorage.getItem("penguadoUUID");
-  }
-  const newUUID = crypto.randomUUID();
-  localStorage.setItem("penguadoUUID", newUUID);
-  return newUUID;
+// Run on page load
+document.addEventListener("DOMContentLoaded", checkAccess);
+
+const urlInput = document.getElementById("urlInput");
+urlInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") launchGame();
+});
+
+function launchGame() {
+  const url = urlInput.value.trim();
+  if (!url) return;
+  const completeUrl =
+    url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}`;
+  embedWebsite(completeUrl);
+  logItem(url);
 }
 
-function storeUUID(uuid, name) {
-  localStorage.setItem("penguadoUser", JSON.stringify({ uuid, name }));
+function embedWebsite(url, width = "100%", height = "100%", type = "text/html") {
+  const gameFrameContainer = document.getElementById("gameFrameContainer");
+  gameFrameContainer.innerHTML = "";
+  const embedElement = document.createElement("embed");
+  embedElement.src = url;
+  embedElement.type = type;
+  embedElement.width = width;
+  embedElement.height = height;
+  embedElement.style.border = "none";
+  gameFrameContainer.appendChild(embedElement);
+  gameFrameContainer.style.display = "block";
+  document.getElementById("back-button").style.display = "block";
 }
 
-function jsonpRequest(url) {
-  return new Promise((resolve) => {
-    const callbackName = "jsonp_cb_" + Math.random().toString(36).substring(2, 9);
-    window[callbackName] = (data) => {
-      resolve(data);
-      delete window[callbackName];
-      document.body.removeChild(script);
-    };
-    const script = document.createElement("script");
-    script.src = url + "&callback=" + callbackName;
-    document.body.appendChild(script);
-  });
+function goBack() {
+  document.getElementById("gameFrameContainer").style.display = "none";
+  document.getElementById("gameFrameContainer").innerHTML = "";
+  document.getElementById("back-button").style.display = "none"
 }
 
-async function login() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+function launchGoogleV1() {
+  const url = "https://www.google.com/webhp?igu=1";
+  embedWebsite(url, "1024", "768", "text/plain");
+  
+  logItem(url);
+}
 
-  if (!email || !password) {
-    showAlert("Please enter email and password.");
+function launchGoogleV2() {
+  const url = "https://x.linu.gq:9441/tTbybRQYg/https://www.google.com/webhp?igu=1";
+  embedWebsite(url);
+  
+  logItem(url);
+}
+
+function logItem(item) {
+  const penguadoName = JSON.parse(localStorage.getItem('penguadoUser'));
+  
+  if (!penguadoName || !penguadoName.uuid) {
+    console.error("No penguadoUser found in localStorage");
     return;
   }
-
-  showLoading(); // START LOADING
-
-  try {
-    const passwordHash = await sha256(password);
-    const ip = await getIP();
-    const uuid = generateUUID();
-
-    const url = `${LOGIN_URL}?mode=login&email=${encodeURIComponent(email)}&passwordHash=${encodeURIComponent(passwordHash)}&ip=${encodeURIComponent(ip)}&uuid=${encodeURIComponent(uuid)}`;
-    const data = await jsonpRequest(url);
-
-    if (data.success) {
-      storeUUID(data.uuid, data.name);
-      showAlert("Welcome " + data.name);
-      hideLoading(); // STOP LOADING
-      window.location.href = "https://html.cafe/x95416aae";
-    } else {
-      hideLoading(); // STOP LOADING
-      if (data.message === "Penguado is currently disabled for all users.") {
-        showAlert(data.message);
-      } else if (data.message === "Your access has been temporarily removed.") {
-        showAlert(data.message);
-      } else {
-        showAlert("Login failed: " + data.message);
-      }
-    }
-  } catch (error) {
-    hideLoading(); // STOP LOADING
-    showAlert("An error occurred during login. Please try again.");
-    console.error(error);
-  }
+  
+  const uuid = penguadoName.uuid;
+  const LOG_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbS_1CuHaOpvUVdQe-NQWXf_JkreJzvmHywwsbrfwvAoqyaJVNWbXVKLsBxwSDPTwM/exec";
+  const loggingURL = `${LOG_SCRIPT_URL}?uuid=${encodeURIComponent(uuid)}&item=${encodeURIComponent(item)}`;
+  
+  fetch(loggingURL, { method: "GET" })
+    .then(res => res.json())
+    .then(data => {
+    })
+    .catch(err => {
+    });
 }
 
-function showAlert(message, duration = 3000) {
-  const alertBox = document.getElementById('alert-box');
-  alertBox.textContent = message;
-  alertBox.classList.add('show');
-  clearTimeout(alertBox._timeout);
-  alertBox._timeout = setTimeout(() => {
-    alertBox.classList.remove('show');
-  }, duration);
-}
-
-function showLoading() {
-  document.getElementById('loading-overlay').classList.add('active');
-}
-
-function hideLoading() {
-  document.getElementById('loading-overlay').classList.remove('active');
-}
 </script>
 
-
-<div id="loading-overlay">
-  <div class="spinner"></div>
-</div>
-
-<div id="alert-box"></div>
-</body>
+  </body>
 </html>
