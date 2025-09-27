@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/v6hRy4d3/Penguado-Favicon-Bright.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Penguado Games (Blue/Green Theme)</title>
+    <style>
+        /* Aquatic Theme CSS */ body { font-family: Arial, sans-serif; text-align: center; background: white; color: white; margin: 0; min-height: 100vh; /* changed from height:100vh so it grows with content */ display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow-y: auto; /* allow scrolling if content is taller than viewport */ } #welcome-msg { color: #158f8a; font-weight: bold; font-size: 24px; margin: 20px 0 10px; user-select: none; } /* Scrollbar for body */ body::-webkit-scrollbar { width: 12px; } body::-webkit-scrollbar-track { background: rgba(0, 165, 192, 0.1); border-radius: 10px; } body::-webkit-scrollbar-thumb { background: #158f8a; border-radius: 10px; } body::-webkit-scrollbar-thumb:hover { background: #1aa3a3; } /* Buttons */ .game-button { display: block; /* changed from inline-block to stack vertically */ background: #1aa3a3; color: white; padding: 15px 30px; margin: 10px auto; /* center horizontally */ border: none; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.3s ease, opacity 0.5s ease; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 165, 192, 0.3); width: fit-content; /* shrink to button size */ } .game-button::after { content: ''; position: absolute; width: 100%; height: 4px; background: white; top: 0; left: -100%; transition: left 0.3s ease-in-out; } .game-button:hover::after { left: 100%; } .game-button:hover { transform: scale(1.1); background: #1aa3a3; /* fixed extra parenthesis error */ } /* Game container overlay */ .game-container { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; animation: fadeIn 0.75s ease-in-out; z-index: 10; border-radius: 25px; } @keyframes fadeIn { 0% { transform: scale(0.3) rotate(-45deg) translateY(-200px); opacity: 0; filter: blur(10px); } 40% { transform: scale(1.05) rotate(5deg) translateY(20px); opacity: 1; filter: blur(0); } 70% { transform: scale(0.95) rotate(-2deg) translateY(-10px); } 85% { transform: scale(1.02) rotate(1deg) translateY(5px); } 100% { transform: scale(1) rotate(0deg) translateY(0); } } .back-button { display: none; position: absolute; top: 0; left: 0; padding: 5px 5px; background: rgba(21, 143, 138, 0.6); color: white; border: none; cursor: pointer; border-radius: 0 5px 5px 5px; z-index: 9999; } /* Filter inputs */ .filter-container { margin-bottom: 20px; } .filter-container input, .filter-container button { padding: 10px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; } /* Content container */ #content-container { width: 100%; overflow-y: auto; background: white; display: flex; justify-content: center; /* center the wrapper */ padding: 16px 0; } .content-wrapper { width: 100%; max-width: 1200px; /* optional max width */ background: linear-gradient(45deg, #00acc1, #1abc9c); border-radius: 25px; padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; /* stack buttons vertically */ gap: 10px; /* spacing between buttons */ } /* Scrollbar for content container */ #content-container::-webkit-scrollbar { width: 12px; } #content-container::-webkit-scrollbar-track { background: rgba(0, 165, 192, 0.1); border-radius: 10px; } #content-container::-webkit-scrollbar-thumb { background: #158f8a; border-radius: 10px; } #content-container::-webkit-scrollbar-thumb:hover { background: #1aa3a3; } /* Game buttons container */ #game-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding-right: 10px; height: auto; } /* Loading Overlay CSS */ #loading-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9998; justify-content: center; align-items: center; } #loading-overlay.active { display: flex; } .spinner { border: 6px solid #f3f3f3; border-top: 6px solid #158f8a; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; } @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+    <div id="loading-overlay" class="active">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="welcome-msg"></div>
+
+    <div id="content-container" style="display:none;">
+        <div class="content-wrapper">
+            <h1>Penguado Games</h1>
+            <div class="filter-container">
+                <input type="text" id="searchBar" placeholder="Search games..." oninput="filterGames()" />
+                <button onclick="setCategory('all')">All</button>
+                <button onclick="setCategory('platformer')">Platformer</button>
+                <button onclick="setCategory('wrestling')">Wrestling</button>
+                <button onclick="setCategory('fighting')">Fighting</button>
+                <button onclick="setCategory('shooter')">Shooter</button>
+                <button onclick="setCategory('racing')">Racing</button>
+                <button onclick="setCategory('sports')">Sports</button>
+                <button onclick="setCategory('arcade')">Arcade</button>
+                <button onclick="setCategory('puzzle')">Puzzle</button>
+                <button onclick="setCategory('multiplayer')">Multiplayer</button>
+                <button onclick="setCategory('minecraft')">Minecraft</button>
+                <button onclick="setCategory('io')">.io</button>
+                <button onclick="setCategory('board')">Board</button>
+            </div>
+            <div id="game-buttons">
+                        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smashkarts.io')">Play Smash Karts Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://1v1.lol')">Play 1v1.LOL Official</button>
+        <button class="game-button" data-category="shooter"onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-439')">Play 1v1.LOL on Github</button>
+        <button class="game-button" data-category="minecraft" onclick="embedWebsite('https://eaglercraft.net')">Play Eaglercraft Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://shellshock.io/')">Play Shell Shockers Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://scrambled.world/')">Play Shell Shockers on Scrambled World</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://www.symbaloo.com/mix?q=Krunker.io')">Play Krunker on Symbaloo</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://zombsroyale.io/')">Play Zombs Official</button>
+        <button class="game-button" data-category="io" onclick="embedWebsite('https://littlebigsnake.io')">Play Little Big Snake Official</button>
+        <button class="game-button" data-category="io" onclick="embedWebsite('https://superhex.io')">Play Superhex Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://warbrokers.io')">War Brokers</button>
+        <button class="game-button" data-category="io" onclick="embedWebsite('https://worldsfrontera.com')">Play World's Frontera Official</button>
+        <button class="game-button" data-category="io" onclick="embedWebsite('https://stickman.io')">Play Stickman Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/rolly')">Play Rolly Vortex Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/rise-higher/game.html')">Play Rise Higher Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/snow-rider-3d/game.html')">Play Snow Rider 3D Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/drift-hunters/game.html')">Play Drift Hunters Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/ovo/game.html')">Play OvO Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/geometry-dash/game.html')">Play Geometry Dash Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/drift-boss/game.html')">Play Drift Boss Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/rolling-ball-3d/game.html')">Play Rolling Ball 3D Official</button>
+        <button class="game-button" data-category="arcade"onclick="embedWebsite('https://www.hoodamath.com/mobile/games/geometry-dash-subzero/game.html')">Play Geometry Dash Subzero Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/geometry-dash-meltdown/game.html')">Play Geometry Dash Meltdown Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/slope-run/game.html')">Play Slope Run on Hoodamath</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/chess/game.html')">Play Chess on Hoodamath</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/2048-game/game.html')">Play 2048 Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://www.hoodamath.com/mobile/games/geometry-dash-lite/game.html')">Play Geometry Dash Lite Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://www.hoodamath.com/games/run3.html')">Play Run 3 on Hoodamath</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://webglmath.github.io/moto-x3m/')">Play Moto X3M Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://slopegame.io')">Play Slope Official</button>
+        <button class="game-button" data-category="io" onclick="embedWebsite('https://gulper.io')">Play Slither.io Official</button>
+        <button class="game-button" data-category="io"onclick="embedWebsite('https://orteil.dashnet.org/cookieclicker')">Play Cookie Clicker Official</button>
+        <button class="game-button" data-category="arcade"onclick="embedWebsite('https://basket-random-game.github.io/file')">Play Basket Random On Github</button>
+        <button class="game-button" data-category="racing"onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-590')">Play Stickman Bike On Github Games</button>
+        <button class="game-button" data-category="puzzle"onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-491')">Play Redball 4 Official</button>
+        <button class="game-button" data-category="shooter"onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-424')">Play Rooftop Shooters 2 Offical</button>
+        <button class="game-button" data-category="racing"onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-444')">Play Subway Surfers Official</button>
+        <button class="game-button" data-category="puzzle"onclick="embedWebsite('https://basket-random-game.github.io/source/class-455')">Play Tetris on Github</button>
+        <button class="game-button" data-category="arcade"onclick="embedWebsite('https://basket-random-game.github.io/source/class-402')">Play Crossy Road on Poki</button>
+        <button class="game-button" data-category="shooter"onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-479')">Play Getaway Shootout on CrazyGames</button>
+        <button class="game-button" data-category="arcade"onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-511')">Play Soccer Random on TwoPlayerGames.org</button>
+        <button class="game-button" data-category="puzzle"onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-382')">Play Slime Labratory on TopVaz</button>
+        <button class="game-button" data-category="puzzle"onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-132')">Play Slime Labratory 3 on TopVaz</button>
+        <button class="game-button" data-category="racing"onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-55')">Play Rally Point 5 on CrazyGames</button>
+        <button class="game-button" data-category="arcade"onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-245')">Play Vex 8 on AGame.com</button>
+        <button class="game-button" data-category="shooter"onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-496')">Play Superhot Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smashkartsonline.github.io/source/class-809/')">Play VEX 6 on TopVAz</button>
+        <button class="game-button" data-category="strategy" onclick="embedWebsite('https://smashstore2212.github.io/g5/class-409')">Play Raft Wars on TopVAz</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smashkartsonline.github.io/source/class-499/')">Play Block Tower Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smashstore2212.github.io/g26/class-459')">Play MotoX3M Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smashstore2212.github.io/g69/class-630/')">Play Formula 1 Racing on Github</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smashkartsonline.github.io/source/class-527/')">Play Rocket Soccer on Github</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smashstore2212.github.io/g2/class-619')">Play Stair Race 3D Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smashstore2212.github.io/g5/class-460/')">Play MotoX3M Winter Edition Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://www.gamezop.com/en/game/bubble-shooter-classic/yVywAGBQ6')">Play Bubble Shooter Classic</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://www.gamezop.com/en/game/pixel-slime/Sk728YXJx')">Play Pixel Slime</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://www.gamezop.com/en/game/city-cricket/HJP4afkvqJQ')">Play City Cricket</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-474')">Play Basketball Legends 2020</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-475')">Play Pool Ball 8</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-281')">Play Stickman Fight Ragdoll</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-650')">Play FortZ on Poki</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-673')">Play Tube Jumpers</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-510')">Play Vex 7 on Poki</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-123')">Play Temple Run 2</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-24')">Play Driftwave</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-379')">Play Shady Bears on TopVAZ</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-474')">Play Basketball Legends on TopVAZ</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-382')">Play Slime Laboratory on TopVAZ</button>
+        <button class="game-button" data-category="fighting" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-281')">Play Stickman Fight Ragdoll on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-310')">Play Duo Vikings 3 on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-365')">Play Stickman Crazy Box on TopVAZ</button>
+        <button class="game-button" data-category="multiplayer" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-649')">Play Minibattles on TopVAZ</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-666')">Play Rowdy Wrestling on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-644')">Play Thumb Fighter on TopVAZ</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-71')">Play Water Polo Ragdoll on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-548')">Play Poor Bunny on TopVAZ</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-479')">Play Getaway Shootout on TopVAZ</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-282')">Play Bouncy Basketball on TopVAZ</button>
+        <button class="game-button" data-category="fighting" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-669')">Play Boxing Physics 2 on TopVAZ</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g4/class-225')">Play Lords of Gomoku on TopVAZ</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-345')">Play Fireboy and Watergirl 2: Light Temple on TopVAZ</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-665')">Play Bumper Cars Soccer on TopVAZ</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-346')">Play Fireboy and Watergirl 1: Forest Temple on TopVAZ</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-343')">Play Fireboy and Watergirl 4: Crystal Temple on TopVAZ</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-616')">Play Head Soccer 2023 on TopVAZ</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-604')">Play Go Kart Go Ultra on TopVAZ</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-511')">Play Soccer Random on TopVAZ</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-513')">Play Gun Mayhem 2 on TopVAZ</button>
+        <button class="game-button" data-category="basketball" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-449')">Play Basketball Stars on TopVAZ</button>
+        <button class="game-button" data-category="board" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-383')">Play Battle Golf on TopVAZ</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-307')">Play Duo Survival on TopVAZ</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-380')">Play Football Blitz on TopVAZ</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-249')">Play Ping Pong Chaos on TopVAZ</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-648')">Play Tictactoe on TopVAZ</button>
+        <button class="game-button" data-category="board" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-244')">Play Snakes and Ladders on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-293')">Play ZOOM-BE 3 on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-241')">Play Sumo Party on TopVAZ</button>
+        <button class="game-button" data-category="action" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-15')">Play Ooze Odyssey on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-308')">Play Duo Survival 2 on TopVAZ</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-300')">Play Moto Space Racing: 2 Player on TopVAZ</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-342')">Play Fireboy and Watergirl 5: Elements on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-421')">Play Blumgi Slime on TopVAZ</button>
+        <button class="game-button" data-category="fighting" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-428')">Play Thumb Fighter Christmas on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-274')">Play Animal Arena on TopVAZ</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-363')">Play Blumgi Dragon on TopVAZ</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-763')">Play Heart Star on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g6/class-144')">Play Farm Battles on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-334')">Play Bacon May Die on TopVAZ</button>
+        <button class="game-button" data-category="board" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-265')">Play Darts Pro on TopVAZ</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-436')">Play Basket Random on TopVAZ</button>
+        <button class="game-button" data-category="board" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-384')">Play Four in a Row on TopVAZ</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-345')">Play Wasteland on TopVAZ</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-665')">Play Bumper Cars Soccer Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-792')">Play Extreme Car Driving Simulator Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-595')">Play Merge Cyber Racers Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-712')">Play Just Park It 11 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-550')">Play Traffic Mania Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-769')">Play City Rider Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-791')">Play 4x4 Drive Offroad Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-747')">Play Zombie Derby Pixel Survival Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-447')">Play Drift Hunters Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-814')">Play Rocket Pult Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-515')">Play Car Rush Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-280')">Play Boxrob Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-726')">Play Cars Thief Tank Edition Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-286')">Play Truck Loader 4 Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-653')">Play Super Tunnel Rush Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-573')">Play Parking Fury 2 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-686')">Play Stock Car Hero Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-523')">Play Earn To Die Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-754')">Play Blocky Cars Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-393')">Play Traffic Rush Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-606')">Play 3d Car Simulator Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-751')">Play Offroader V5 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-793')">Play Furious Racing 3D Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-710')">Play Burnout Drift Seaport Max Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-60')">Play Rally Point Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-298')">Play Just Park It 12 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-515')">Play Parking Fury Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-528')">Play N Gon Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-630')">Play Super Star Car Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-711')">Play Mad Truck Challenge Special Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-727')">Play Dubai Police Parking 2 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-463')">Play Eggy Car Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-360')">Play Car Eats Car: Winter Adventure Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-565')">Play Madalin Stunt Cars 2 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-692')">Play Grand Prix Hero Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-522')">Play Highway Traffic Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-289')">Play Truck Loader Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-706')">Play Car Simulator Arena Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-288')">Play Truck Loader 2 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-655')">Play Cars Thief Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-543')">Play Top Speed Racing 3d Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-716')">Play School Bus Demolition Derby Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-705')">Play Super Racing Gt Drag Pro Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-714')">Play Extreme Off Road Cars 3: Cargo Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-808')">Play Ultimate Car Driving Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-285')">Play Truck Loader 5 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-551')">Play Merge Round Racers Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g20/class-401')">Play Drive Mad Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-278')">Play BoxRob 3 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-715')">Play Extreme Off Road Cars Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-643')">Play Cats Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-739')">Play Zombie Killer Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-707')">Play Color Tunnel Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-379')">Play Freeway Fury 3 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-509')">Play Driftwood Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-574')">Play Furious Car Racing Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-409')">Play Mad City Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-493')">Play Vex 5 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-445')">Play Subway Surfers Houston Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-800')">Play Slope 2 Multiplayer Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-830')">Play Parkour Race Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-456')">Play Ovo Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-816')">Play Shortcut Race Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-14')">Play OvO Dimensions Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-510')">Play Vex 7 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-444')">Play Subway Surfers Newyork Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-576')">Play Parkour Block 3d Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-687')">Play Athletics Hero Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-328')">Play RunMan: Race Around the World Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-443')">Play Subway Surfers Beijing Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-134')">Play Temple Run 2: Frozen Shadows Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-245')">Play Vex 8 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-614')">Play Crazy Tunnel 3d Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-335')">Play Flip Runner Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-541')">Play Slope Tunnel Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-535')">Play Death Run 3d Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-501')">Play Slope 3 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-516')">Play Electron Dash Official</button>
+        <button class="game-button" data-category="multiplayer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-364')">Play Tag 2 Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-572')">Play Color Tunnel 2 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-403')">Play G Switch 3 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-693')">Play Stickman School Run Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-826')">Play Super Mario Bros Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-319')">Play ColorUp Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-819')">Play Run 3 Editor Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-602')">Play Running Fred Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-446')">Play Subway Surfers Monaco Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-11')">Play Rodeo Stampede Savannah Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-804')">Play Subway Runner Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-103')">Play Temple Run 2 Jungle Fall Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g8-san-francisco/class-442')">Play Subway Surfers Sanfransisco Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-540')">Play Slope City Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-567')">Play Vex 4 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-526')">Play Cluster Rush Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-90')">Play Daddy Long Legs Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-80')">Play Temple Run 2 Holi Festival Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-123')">Play Temple Run 2 Frozen Festival Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g4/class-174')">Play We Skate Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-366')">Play G-switch 4 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-623')">Play Two Ball 3d Dark Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-133')">Play CircloO 2 Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-672')">Play Bubble Trouble 3 Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-580')">Play Murder Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-136')">Play Pizzapunk Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-101')">Play Duck Life Battle Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-283')">Play Double panda Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-377')">Play Descent Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-684')">Play Unicycle Hero Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-678')">Play Pool Club Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-728')">Play Parking Fury 3D Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-123')">Play Temple Run 2 Frozen Festival Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-364')">Play Tag 2 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-142')">Play Cats Love Cake Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-134')">Play Temple Run 2: Frozen Shadows Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-438')">Play Tomb Of The Mask Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-689')">Play Bowling Stars Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-430')">Play Throw it higher Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-743')">Play Fancy Pants 2 Official</button>
+        <button class="game-button" data-category="board" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-384')">Play Four in a Row Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-517')">Play Iron Snout Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-74')">Play Stickman Run Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-345')">Play Fireboy and Watergirl 2: Light Temple Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-362')">Play Catpad Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-366')">Play G-switch 4 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-76')">Play Doctor Teeth Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-399')">Play Slopey Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g4/class-174')">Play We Skate Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-671')">Play Superbattle 2 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-315')">Play Snail Bob 6 Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-578')">Play Sketchbook 04 Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-373')">Play Tetra Blocks Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-406')">Play Stickman Hook Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-280')">Play Boxrob Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-807')">Play Two Neon Boxes Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-471')">Play Bubble Shooter Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-413')">Play Blumgi Rocket Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-396')">Play Noob Hook Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-295')">Play Shape Fold Nature Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-268')">Play Cave Blast Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-417')">Play Stacktris Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-390')">Play Odd Bot Out Official</button>
+        <button class="game-button" data-category="music" onclick="embedWebsite('https://smash-kartsonline.github.io/fnf3/class-349')">Play Friday Night Funkin vs Hatsune Miku Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-62')">Play Survival Express Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-321')">Play Dino Bros Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-8')">Play Space Thing Official</button>
+        <button class="game-button" data-category="board" onclick="embedWebsite('https://smash-kartsonline.github.io/g4/class-221')">Play Chess Grandmaster Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-376')">Play James Gun Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-333')">Play Basketball Frvr Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-3')">Play Toaster Dash Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-667')">Play Bubble Trouble Official</button>
+        <button class="game-button" data-category="music" onclick="embedWebsite('https://smash-kartsonline.github.io/fnf3/class-350')">Play Friday Night Funkin vs XE Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-328')">Play RunMan: Race Around the World Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-75')">Play Stickman Parkour 3 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-615')">Play Grindcraft Official</button>
+        <button class="game-button" data-category="music" onclick="embedWebsite('https://smash-kartsonline.github.io/fnf3/class-348')">Play Friday Night Funkin B-Sides Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-537')">Play Snow Rider 3D Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-403')">Play G Switch 3 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-49')">Play Super Fowlst 2 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-573')">Play Parking Fury 2 Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-696')">Play Power Badminton Official</button>
+        <button class="game-button" data-category="board" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-19')">Play Impossible Tic Tac Toe Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-242')">Play Stupid Zombies 2 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g6/class-156')">Play Twice Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-398')">Play Hypersnake Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-476')">Play Doge Miner Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g4/class-228')">Play Mini Train Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-767')">Play Arithmetica Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g4/class-169')">Play Pizzafall Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-699')">Play My Pony My Little Race Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-647')">Play Battle Wheels Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-323')">Play Scrap Divers Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-662')">Play Skiing Fred Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-704')">Play Slime Road Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-634')">Play Maze Path Of Light Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-426')">Play Stickman Climb 2 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-659')">Play Box10 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-132')">Play Jet Boy Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-278')">Play Thief Maze Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-671')">Play Doo-Doo World Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-102')">Play Stickboy Escape Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-820')">Play Tomb of The Mask Color Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-702')">Play Street Ball Jam Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-290')">Play Moving Truck: Bounty Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-95')">Play Restaurant Aand Cooking Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-721')">Play Moto Maniac Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-11')">Play Rodeo Stampede Savannah Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-44')">Play Hop Chop Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-722')">Play Moto Maniac 2 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-620')">Play Ape Sling Official</button>
+        <button class="game-button" data-category="minecraft" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-799')">Play Minecraft Builder Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-640')">Play Roly Poly Monsters Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-521')">Play Color Switch Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-393')">Play Traffic Rush Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-588')">Play Soccer Skills Champions League Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-673')">Play Tube Jumpers Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-46')">Play Pond Race Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-703')">Play Golf Champions Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-484')">Play Rolly Vortex Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-298')">Play Just Park It 12 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-520')">Play Short Life Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-143')">Play Footyzag Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-90')">Play Daddy Long Legs Official</button>
+        <button class="game-button" data-category="board" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-244')">Play Snakes and Ladders Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-548')">Play Poor Bunny Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-759')">Play Basket Swooshes Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-127')">Play Infinite Soccer Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-577')">Play Bunny Hop Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g6/class-146')">Play Speed Pool King Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-14')">Play OvO Dimensions Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-296')">Play Shape Fold Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-765')">Play Tiny Town Racing Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-500')">Play Elastic Man Official</button>
+        <button class="game-button" data-category="multiplayer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-365')">Play Stickman Crazy Box Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-277')">Play 8bit Fiesta Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-498')">Play A Dance Of Fire And Ice Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-563')">Play Candy Jump Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-279')">Play BoxRob 2 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-562')">Play Worlds Hardest Game 3 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-490')">Play House Of Hazards Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-590')">Play Stickman Bike Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-412')">Play Dreadhead Parkour Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-245')">Play Vex 8 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-421')">Play Blumgi Slime Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-369')">Play Dunk Perfect Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-822')">Play Rabbit Samurai Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-278')">Play BoxRob 3 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-352')">Play Avalanche Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-675')">Play Dunkbrush Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-497')">Play Curve Ball 3D Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-15')">Play Ooze Odyssey Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-22')">Play Fruit Ninja Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-375')">Play Bubbles Cool Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-636')">Play Swingo Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-415')">Play Sausage Flip Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-72')">Play Bumpy Jumpy Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-24')">Play Driftwave Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-411')">Play Temple Of Boom Official</button>
+        <button class="game-button" data-category="puzzle" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-518')">Play Burrito Bison Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-137')">Play 9 Balls Pool Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-262')">Play Dyna Boy Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-103')">Play Temple Run 2 Jungle Fall Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-23')">Play Freefall Apart Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-730')">Play Parking Fury 3D Bounty Hunter Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-750')">Play Puppet Master Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-413')">Play Fut Droz Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-778')">Play Drift 3D Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-266')">Play Ching Ching Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-523')">Play Parkour Race Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g50/class-12')">Play Stickman Ragdoll Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-42')">Play Vex 7 Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-740')">Play Stickman Boxing KO Champion Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-649')">Play Minibattles Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-282')">Play Bouncy basketball Official</button>
+        <button class="game-button" data-category="fighting" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-529')">Play Big Shot Boxing Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-677')">Play Cricket World Cup Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-383')">Play Battle golf Official</button>
+        <button class="game-button" data-category="fighting" onclick="embedWebsite('https://smash-kartsonline.github.io/g20/class-825')">Play Boxing Random Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-265')">Play Darts Pro Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-687')">Play Athletics Hero Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-381')">Play Touchdowners Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-336')">Play Super Mx The Champion Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-386')">Play Little Master Cricket Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-671')">Play Superbattle 2 Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-696')">Play Power Badminton Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-594')">Play Cyber Cars Punk Racing Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-698')">Play Rowdy City Wrestling Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-335')">Play Flip Runner Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-64')">Play Boxing Fighter Shadow Battle Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-765')">Play Tiny Town Racing Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-400')">Play Retro Bowl Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-665')">Play Bumper Cars Soccer Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g4/class-174')">Play We Skate Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-666')">Play Rowdy Wrestling Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-662')">Play Skiing Fred Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-266')">Play Court Kings 3D Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-430')">Play Throw it higher Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-766')">Play 12 Minibattles Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-93')">Play Football Penalty Champions Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-697')">Play Foot Chinko Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-429')">Play Soccer Skills Euro Cup Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-700')">Play Jollyworld Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-693')">Play Stickman School Run Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-143')">Play Footyzag Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-701')">Play Superbike Hero Official</button>
+        <button class="game-button" data-category="fighting" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-681')">Play Free Kick Shooter Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-675')">Play Dunkbrush Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-653')">Play Super Tunnel Rush Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-370')">Play 2 minute football Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-691')">Play Basket Champs Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g3/class-318')">Play Peppa Pig: Basketball Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-590')">Play Stickman Bike Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-528')">Play N Gon Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-823')">Play Stickman Golf Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-423')">Play Soccer Skills World Cup Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-42')">Play Midnight Drive Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-684')">Play Unicycle Hero Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-703')">Play Golf Champions Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-676')">Play Linebacker Alley 2 Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-380')">Play Football Blitz Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-369')">Play Dunk perfect Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-241')">Play Sumo Party Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-668')">Play Dunkers Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-777')">Play Golfinity Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-651')">Play Wrassling Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-810')">Play Volleyball Challenge Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-436')">Play Basket Random Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-694')">Play Stickman Bike Pr Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-632')">Play Burnin' Rubber Crash n' Burn Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g7/class-71')">Play Water Polo Ragdoll Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-688')">Play Super Bike The Champion Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-449')">Play Basketball Stars Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-616')">Play Head Soccer 2023 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-770')">Play Soccar Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-680')">Play A Small World Cup Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-692')">Play Grand Prix Hero Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-474')">Play Basketball Legends Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-702')">Play Street Ball Jam Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-690')">Play Aqua Thrills Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-511')">Play Soccer Random Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-689')">Play Bowling Stars Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g74/class-249')">Play Ping Pong Chaos Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g97/class-412')">Play Dreadhead Parkour Official</button>
+        <button class="game-button" data-category="fighting" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-669')">Play Boxing Physics 2 Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-628')">Play Super Liquid Soccer Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-630')">Play Super Star Car Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-683')">Play Kix Dream Soccer Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g72/class-699')">Play My Pony My Little Race Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-695')">Play Heads Arena Soccer All Stars Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-682')">Play Air Hockey Championship Deluxe Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-127')">Play Infinite Soccer Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-554')">Play Archery World Tour Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-51')">Play 12 Mini Battles 2 Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-68')">Play Rally Point 3 Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-685')">Play 4th And Goal 2022 Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g6/class-146')">Play Speed Pool King Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-759')">Play Basket Swooshes Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-66')">Play Penalty Rivals Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g177/class-333')">Play Basketball Frvr Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-475')">Play 8 Ball Pool Official</button>
+        <button class="game-button" data-category="fighting" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-52')">Play Rree Kick Screamers Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g16/class-419')">Play Blumgi Ball Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g9/class-769')">Play City Rider Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g69/class-686')">Play Stock Car Hero Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g8/class-129')">Play Unicycle Legend Official</button>
+        <button class="game-button" data-category="shooter" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-627')">Play Penalty Shooters 2 Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g22/class-364')">Play Tag 2 Official</button>
+        <button class="game-button" data-category="fighting" onclick="embedWebsite('https://smash-kartsonline.github.io/g5/class-519')">Play Penalty Kick Online Official</button>
+        <button class="game-button" data-category="wrestling" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-588')">Play Soccer Skills Champions League Official</button>
+        <button class="game-button" data-category="Other" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-678')">Play Pool Club Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://smash-kartsonline.github.io/g77/class-59')">Play Skateboard Hero Official</button>
+        <button class="game-button" data-category="racing" onclick="embedWebsite('https://smash-kartsonline.github.io/g2/class-626')">Play Real Cars In City Official</button>
+        <button class="game-button" data-category="sports" onclick="embedWebsite('https://smash-kartsonline.github.io/g/class-811')">Play Volley Random Official</button>
+        <button class="game-button" data-category="platformer" onclick="embedWebsite('https://smash-kartsonline.github.io/g26/class-537')">Play Snow Rider 3D Official</button>
+        <button class="game-button" data-category="arcade" onclick="embedWebsite('https://onlinescientificresearch.com/games/coreball/')">Play Coreball Official</button>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="gameFrameContainer" class="game-container"></div>
+    <button id="back-button" class="back-button" onclick="goBack()">Back</button>
+
+    <script>
+        // Check login status on page load
+        function checkAccess() {
+            let userData = null;
+            try {
+                userData = JSON.parse(localStorage.getItem("penguadoUser"));
+            } catch (e) {
+                console.error("Invalid penguadoUser format:", e);
+            }
+
+            if (userData && userData.uuid && userData.name) {
+                document.getElementById('welcome-msg').textContent = `Welcome, ${userData.name}!`;
+                // Show content after login check
+                document.getElementById('content-container').style.display = 'flex';
+            } else {
+                // Redirect to login if not logged in
+                window.location.href = "https://html.cafe/x2e5c90e3";
+            }
+        }
+
+        // BAN CHECK FUNCTION
+        async function checkBan() {
+            try {
+                // Replace with your actual Google Apps Script deployed URL
+                const banListURL = "https://script.google.com/macros/s/AKfycbwDP_kzKTPhU8zES2P1fb5Ouoq-i4XwpuD8xHO8MXsIw3xgqFg9hVyHAAK7P8dHOMWE/exec";
+
+                // Get user IP using ipify
+                const ipRes = await fetch("https://api.ipify.org?format=json");
+                const ipData = await ipRes.json();
+                const userIP = ipData.ip;
+
+                // Fetch banned IP list (expecting JSON array of strings)
+                const bannedRes = await fetch(banListURL);
+                const bannedList = await bannedRes.json();
+
+                if (bannedList.includes(userIP)) {
+                    // Show ban message and stop loading site
+                    document.body.innerHTML = "<h1 style='color:red; font-family: Arial, sans-serif; padding: 20px;'>Access Denied. You have been banned.</h1>";
+                    return false; // Block further execution
+                } else {
+                    console.log("Not banned: " + userIP);
+                    return true; // Allow site to load
+                }
+            } catch (err) {
+                console.error("Error during ban check:", err);
+                // Fail open: if error, allow site
+                return true;
+            }
+        }
+
+        // Run ban check, then login check, then enable features
+        (async () => {
+            const allowed = await checkBan();
+            if (!allowed) return;
+
+            checkAccess();
+
+            function embedWebsite(url, width = '100%', height = '100%') {
+                const gameFrameContainer = document.getElementById("gameFrameContainer");
+                gameFrameContainer.innerHTML = '';
+                const embedElement = document.createElement('embed');
+                embedElement.src = url;
+                embedElement.type = 'text/html';
+                embedElement.width = width;
+                embedElement.height = height;
+                gameFrameContainer.appendChild(embedElement);
+                gameFrameContainer.style.display = "block";
+                document.getElementById('back-button').style.display = 'block';
+  			    document.body.style.overflow = "hidden";
+                logItem(url); 
+            }
+
+            function goBack() {
+                document.getElementById("gameFrameContainer").style.display = "none";
+                document.getElementById("gameFrameContainer").innerHTML = '';
+                document.getElementById('back-button').style.display = 'none';
+  			    document.body.style.overflow = "auto";
+
+            }
+
+            let currentCategory = 'all';
+
+            function setCategory(category) {
+                currentCategory = category;
+                filterGames(category);
+            }
+
+            function filterGames(category = 'all') {
+                const searchText = document.getElementById("searchBar").value.toLowerCase();
+                const buttons = document.querySelectorAll(".game-button");
+                buttons.forEach(button => {
+                    const text = button.innerText.toLowerCase();
+                    const buttonCategory = button.getAttribute("data-category");
+                    const matchesSearch = text.includes(searchText);
+                    const matchesCategory = category === 'all' || buttonCategory === category;
+                    button.style.display = (matchesSearch && matchesCategory) ? "inline-block" : "none";
+                });
+            }
+
+            // Initialize filter on load
+            filterGames(currentCategory);
+
+            // Hide loading overlay after everything is ready
+            document.getElementById('loading-overlay').classList.remove('active');
+
+            // Expose functions globally if needed
+            window.embedWebsite = embedWebsite;
+            window.goBack = goBack;
+            window.setCategory = setCategory;
+            window.filterGames = filterGames;
+        })();
+
+        function logItem(item) {
+          const penguadoName = JSON.parse(localStorage.getItem('penguadoUser'));
+
+          if (!penguadoName || !penguadoName.uuid) {
+            console.error("No penguadoUser found in localStorage");
+            return;
+          }
+
+          const uuid = penguadoName.uuid;
+          const LOG_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbS_1CuHaOpvUVdQe-NQWXf_JkreJzvmHywwsbrfwvAoqyaJVNWbXVKLsBxwSDPTwM/exec";
+          const loggingURL = `${LOG_SCRIPT_URL}?uuid=${encodeURIComponent(uuid)}&item=${encodeURIComponent(item)}`;
+
+          fetch(loggingURL, { method: "GET" })
+            .then(res => res.json())
+            .then(data => {
+              document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(err => {
+              document.getElementById('output').textContent = "Error: " + err;
+            });
+        }
+    </script>
+</body>
+</html>
