@@ -1,1 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/v6hRy4d3/Penguado-Favicon-Bright.png">
+  <title>Penguado Signup (Blue/Green Theme)</title>
+  <style>
+   body {
+  font-family: 'Roboto', Arial, sans-serif;
+  background: #ffffff;
+  color: #00695c; /* aquatic green text */
+  margin: 0; padding: 0;
+  overflow: hidden;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+    
+    /* Loading Overlay */
+#loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  justify-content: center;
+  align-items: center;
+}
 
+#loading-overlay.active {
+  display: flex;
+}
+
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #1abc9c; /* green accent spinner */
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Animated Gradient Background */
+body::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    #1abc9c, /* brighter aquatic green */
+    #00acc1, /* accent blue */
+    #26c6da, /* lighter blue */
+    #1abc9c,
+    #00897b  /* deeper aquatic green */
+  );
+  animation: spinWave 18s linear infinite;
+  filter: blur(140px) opacity(0.8);
+  z-index: 0;
+}
+
+@keyframes spinWave {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Container */
+#container {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 40px 60px;
+  border-radius: 25px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+  width: 380px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+#container:hover {
+  box-shadow: 0 20px 55px rgba(0, 172, 193, 0.45);
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #1abc9c; /* aquatic green */
+  transition: color 0.5s ease;
+}
+#container:hover h2 {
+  color: #00acc1; /* accent blue */
+}
+
+/* Inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  width: 100%;
+  padding: 14px 15px;
+  font-size: 16px;
+  border-radius: 12px;
+  border: 1.5px solid #b2dfdb;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+input:focus {
+  outline: none;
+  border-color: #00acc1;
+  box-shadow: 0 0 12px rgba(0, 172, 193, 0.5);
+}
+
+/* Labels */
+label {
+  font-weight: 500;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 15px;
+  color: #00897b; /* green tone */
+  text-align: left;
+}
+#tos { margin-right: 8px; vertical-align: middle; }
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 14px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #1abc9c, #00acc1);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(0, 172, 193, 0.35);
+  transition: all 0.4s ease;
+}
+button:hover {
+  background: linear-gradient(135deg, #00897b, #26c6da);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(38, 198, 218, 0.5);
+}
+
+/* Links */
+a {
+  color: #00acc1; /* accent blue */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+a:hover { color: #00897b; }
+
+/* Verification Section */
+#verification-section { display: none; }
+#verification-section p {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #00695c;
+}
+#verification-section input[type="text"] {
+  border: 1.5px solid #b2dfdb;
+  background: #e0f7f7;
+  color: #004d40;
+}
+#verification-section input[type="text"]:focus {
+  border-color: #00acc1;
+  box-shadow: 0 0 10px rgba(0, 172, 193, 0.4);
+  background: #ffffff;
+}
+
+/* Alert Box */
+#alert-box {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1abc9c;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 700;
+  box-shadow: 0 6px 22px rgba(26, 188, 156, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+  max-width: 90vw;
+  text-align: center;
+}
+#alert-box.show { opacity: 1; pointer-events: auto; }
+
+  </style>
+</head>
+<body>
+  <div id="container">
+    <!-- Signup form -->
+    <div id="signup-section">
+      <h2>Sign Up</h2>
+      <input id="fullName" placeholder="Full Name" type="text" autocomplete="name"><br>
+      <input id="email" placeholder="Email" type="email" autocomplete="email"><br>
+      <input id="password" placeholder="Password" type="password" autocomplete="new-password"><br>
+      <input id="confirmPassword" placeholder="Confirm Password" type="password" autocomplete="new-password"><br>
+      <label>
+        <input type="checkbox" id="tos">
+        I agree to the <a href="https://sites.google.com/westfordk12.us/a-penguado-lll-bms/d-nfoi-path-a/d-nfio-path-p" target="_blank" rel="noopener">Privacy Policy</a> and 
+        <a href="https://sites.google.com/westfordk12.us/a-penguado-lll-bms/d-nfoi-path-a/d-nfio-path-t" target="_blank" rel="noopener">Terms of Service</a>.
+      </label><br>
+      <button onclick="signup()">Sign Up</button>
+    </div>
+
+    <!-- Verification form -->
+    <div id="verification-section">
+      <h2>Verify Your Email</h2>
+      <p>
+        A verification file named <br><b>"Penguado-Verification-Code-For: <span id="verif-email"></span>"</b> <br>
+        has been shared with your Google Drive.<br>
+        Please open the file and enter the verification code below:
+      </p>
+      <input id="verificationCodeInput" placeholder="Enter verification code" type="text" autocomplete="off"><br>
+      <button onclick="verifyCode()">Verify</button>
+      <button id="resendBtn" onclick="resendCode()">Resend Code</button>
+    </div>
+  </div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzriyZzh-gub5axf9cX3H8GQO-rFwLTAKa67m-z2utNGI0qKdBNNf_5svwSk-qBgcU5qg/exec"; //Used for the signup operation
+  const VERIFICATION_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzyhkDOzPYhwr-Galf05EsehbDyryQuXrCL9eVEBC-gOO6eAifgfKm3pKDca_nZeJD3xw/exec";
+
+  async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function getIP() {
+    return fetch('https://api.ipify.org?format=json')
+      .then(res => res.json())
+      .then(data => data.ip);
+  }
+
+  function generateUUID() {
+    return crypto.randomUUID();
+  }
+
+  function jsonpRequest(url) {
+    return new Promise((resolve) => {
+      const callbackName = "jsonp_cb_" + Math.random().toString(36).substr(2, 9);
+      window[callbackName] = (data) => {
+        resolve(data);
+        delete window[callbackName];
+        document.body.removeChild(script);
+      };
+      const script = document.createElement("script");
+      script.src = url + "&callback=" + callbackName;
+      document.body.appendChild(script);
+    });
+  }
+  
+  function jsonpRequestUpdate(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = 'jsonp_cb_' + Math.random().toString(36).substr(2, 9);
+    window[callbackName] = (data) => {
+      resolve(data);
+      delete window[callbackName];
+      script.remove();
+    };
+    const script = document.createElement('script');
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callbackName;
+    script.onerror = () => {
+      reject(new Error('JSONP request failed'));
+      delete window[callbackName];
+      script.remove();
+    };
+    document.body.appendChild(script);
+  });
+}
+
+
+  async function signup() {
+    let name = document.getElementById("fullName").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+    let tos = document.getElementById("tos").checked;
+
+    if (!name || !email || !password || !confirmPassword || !tos) {
+      showAlert("All fields and agreement must be filled.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      showAlert("Passwords do not match.");
+      return;
+    }
+
+    showLoading();
+    let passwordHash = await sha256(password);
+    let ip = await getIP();
+    let uuid = generateUUID();
+
+    // Signup user normally
+    let signupUrl = `${SCRIPT_URL}?mode=signup&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&passwordHash=${encodeURIComponent(passwordHash)}&ip=${encodeURIComponent(ip)}&uuid=${encodeURIComponent(uuid)}`;
+    let signupData = await jsonpRequest(signupUrl);
+
+    if (!signupData.success) {
+      hideLoading();
+      showAlert(signupData.message);
+      return;
+    }
+
+    // Generate verification code client-side
+    const verificationCode = generateUUID().replace(/-/g, '').substr(0, 16);
+    sessionStorage.setItem("penguado_verification_code", verificationCode);
+    sessionStorage.setItem("penguado_email", email);
+
+    // Send verification code + email to Apps Script to create & share file
+    const verifyUrl = `${VERIFICATION_SCRIPT_URL}?email=${encodeURIComponent(email)}&code=${encodeURIComponent(verificationCode)}`;
+
+    try {
+      let verifyResp = await fetch(verifyUrl);
+      let verifyData = await verifyResp.json();
+      hideLoading();
+      if (!verifyData.success) {
+        showAlert("Verification file error: " + verifyData.message);
+        return;
+      }
+    } catch (e) {
+      hideLoading();
+      showAlert("Failed to create verification file. Please try again.");
+      return;
+    }
+
+    showAlert("Signup successful! A verification file has been sent to your Google Drive.");
+
+    // Switch UI to verification
+    document.getElementById("signup-section").style.display = "none";
+    document.getElementById("verification-section").style.display = "block";
+    document.getElementById("verif-email").textContent = email;
+  }
+
+  async function verifyCode() {
+  const enteredCode = document.getElementById("verificationCodeInput").value.trim();
+  const storedCode = sessionStorage.getItem("penguado_verification_code");
+  const email = sessionStorage.getItem("penguado_email"); // ✅ retrieve email
+
+  if (!enteredCode) {
+    showAlert("Please enter the verification code.");
+    return;
+  }
+
+  if (enteredCode === storedCode) {
+    try {
+      showLoading();
+      await updateStatus(email); // ✅ wait for update to finish
+      showAlert("Verification successful! You may now log in.");
+    } catch (err) {
+      console.error("Error updating status:", err);
+      showAlert("Verification succeeded but status update failed.");
+    } finally {
+      hideLoading();
+      // Clear stored code/email before redirect
+      sessionStorage.removeItem("penguado_verification_code");
+      sessionStorage.removeItem("penguado_email");
+      // Redirect after everything finishes
+      window.location.href = "https://html.cafe/x2e5c90e3";
+    }
+  } else {
+    showAlert("Invalid verification code. Please try again.");
+  }
+}
+
+
+
+  async function resendCode() {
+    const email = sessionStorage.getItem("penguado_email");
+    if (!email) {
+      showAlert("Missing email. Please reload the page and sign up again.");
+      return;
+    }
+    showLoading();
+    const newCode = generateUUID().replace(/-/g, '').substr(0, 16);
+    sessionStorage.setItem("penguado_verification_code", newCode);
+
+    const verifyUrl = `${VERIFICATION_SCRIPT_URL}?email=${encodeURIComponent(email)}&code=${encodeURIComponent(newCode)}`;
+
+    try {
+      let verifyResp = await fetch(verifyUrl);
+      let verifyData = await verifyResp.json();
+      hideLoading();
+      if (verifyData.success) {
+        showAlert("Verification file resent to your Google Drive.");
+      } else {
+        showAlert("Error resending verification file: " + verifyData.message);
+      }
+    } catch (e) {
+      hideLoading();
+      showAlert("Failed to resend verification file.");
+    }
+  }
+
+  function showAlert(message, duration = 3000) {
+    const alertBox = document.getElementById('alert-box');
+    alertBox.textContent = message;
+    alertBox.classList.add('show');
+    clearTimeout(alertBox._timeout);
+    alertBox._timeout = setTimeout(() => {
+      alertBox.classList.remove('show');
+    }, duration);
+  }
+
+  function showLoading() {
+    document.getElementById('loading-overlay').classList.add('active');
+  }
+
+  function hideLoading() {
+    document.getElementById('loading-overlay').classList.remove('active');
+  }
+  
+  async function updateStatus(email) {
+  const STATUS_URL = "https://script.google.com/macros/s/AKfycbyq6t4QxddOO6EDpdkTFLvaHkiROAaGAFfkDMs4zVlUJQQfO29MaXwjT16eyRRWalis/exec";
+  const url = `${STATUS_URL}?email=${encodeURIComponent(email)}`;
+
+  try {
+    showLoading();
+    const data = await jsonpRequestUpdate(url);  // Use jsonpRequest here
+    hideLoading();
+
+    if (data.success) {
+      showAlert("Status updated successfully.");
+    } else {
+      showAlert("Failed to update status: " + data.message);
+    }
+  } catch (error) {
+    hideLoading();
+    showAlert("Error updating status.");
+    console.error(error);
+  }
+}
+
+</script>
+
+        
+<div id="loading-overlay">
+  <div class="spinner"></div>
+</div>
+
+        
+<div id="alert-box"></div>
+</body>
+</html>
