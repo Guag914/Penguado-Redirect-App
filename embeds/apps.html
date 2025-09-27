@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Penguado Login</title>
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: linear-gradient(to bottom right, #FFFFFF, #FFFFFF);
+      color: white;
+      margin: 0; padding: 0;
+      overflow: hidden;
+      user-select: none;
+    }
+    
+    #loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #loading-overlay.active {
+      display: flex;
+    }
+
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #ff4500;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    
+    #alert-box {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff4500;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-family: 'Roboto', Arial, sans-serif;
+      box-shadow: 0 5px 15px rgba(255, 69, 0, 0.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+      max-width: 90vw;
+      text-align: center;
+    }
+    #alert-box.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    
+    #login-section {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(to right, #ff4500, #ff6347);
+      padding: 40px 60px;
+      border-radius: 22.5px;
+      box-shadow: 0 9px 22.5px rgba(0, 0, 0, 0.3);
+      width: 350px;
+      color: white;
+      text-align: center;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px 15px;
+      font-size: 18px;
+      border-radius: 15px;
+      border: none;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+    button {
+      width: 100%;
+      padding: 15px 0;
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+      background: #ff4500;
+      border: none;
+      border-radius: 22.5px;
+      cursor: pointer;
+      box-shadow: 0 9px 22.5px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #ff2200;
+      box-shadow: 0 12px 30px rgba(255, 34, 0, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div id="login-section">
+    <h2>Login</h2>
+    <input id="email" placeholder="Email" type="email" autocomplete="email"><br>
+    <input id="password" placeholder="Password" type="password" autocomplete="current-password"><br>
+    <button onclick="login()">Login</button>
+  </div>
+
+  <script>
+const LOGIN_URL = "https://script.google.com/macros/s/AKfycbzriyZzh-gub5axf9cX3H8GQO-rFwLTAKa67m-z2utNGI0qKdBNNf_5svwSk-qBgcU5qg/exec";
+
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function getIP() {
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    return data.ip;
+  } catch {
+    return "0.0.0.0";
+  }
+}
+
+function generateUUID() {
+  if (localStorage.getItem("penguadoUUID")) {
+    return localStorage.getItem("penguadoUUID");
+  }
+  const newUUID = crypto.randomUUID();
+  localStorage.setItem("penguadoUUID", newUUID);
+  return newUUID;
+}
+
+function storeUUID(uuid, name) {
+  localStorage.setItem("penguadoUser", JSON.stringify({ uuid, name }));
+}
+
+function jsonpRequest(url) {
+  return new Promise((resolve) => {
+    const callbackName = "jsonp_cb_" + Math.random().toString(36).substring(2, 9);
+    window[callbackName] = (data) => {
+      resolve(data);
+      delete window[callbackName];
+      document.body.removeChild(script);
+    };
+    const script = document.createElement("script");
+    script.src = url + "&callback=" + callbackName;
+    document.body.appendChild(script);
+  });
+}
+
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    showAlert("Please enter email and password.");
+    return;
+  }
+
+  showLoading(); // START LOADING
+
+  try {
+    const passwordHash = await sha256(password);
+    const ip = await getIP();
+    const uuid = generateUUID();
+
+    const url = `${LOGIN_URL}?mode=login&email=${encodeURIComponent(email)}&passwordHash=${encodeURIComponent(passwordHash)}&ip=${encodeURIComponent(ip)}&uuid=${encodeURIComponent(uuid)}`;
+    const data = await jsonpRequest(url);
+
+    if (data.success) {
+      storeUUID(data.uuid, data.name);
+      showAlert("Welcome " + data.name);
+      hideLoading(); // STOP LOADING
+      window.location.href = "https://html.cafe/x95416aae";
+    } else {
+      hideLoading(); // STOP LOADING
+      if (data.message === "Penguado is currently disabled for all users.") {
+        showAlert(data.message);
+      } else if (data.message === "Your access has been temporarily removed.") {
+        showAlert(data.message);
+      } else {
+        showAlert("Login failed: " + data.message);
+      }
+    }
+  } catch (error) {
+    hideLoading(); // STOP LOADING
+    showAlert("An error occurred during login. Please try again.");
+    console.error(error);
+  }
+}
+
+function showAlert(message, duration = 3000) {
+  const alertBox = document.getElementById('alert-box');
+  alertBox.textContent = message;
+  alertBox.classList.add('show');
+  clearTimeout(alertBox._timeout);
+  alertBox._timeout = setTimeout(() => {
+    alertBox.classList.remove('show');
+  }, duration);
+}
+
+function showLoading() {
+  document.getElementById('loading-overlay').classList.add('active');
+}
+
+function hideLoading() {
+  document.getElementById('loading-overlay').classList.remove('active');
+}
+</script>
+
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+</div>
+
+<div id="alert-box"></div>
+</body>
+</html>
