@@ -1,0 +1,105 @@
+<div id="online-users-container" style="
+    width: 100%;
+    overflow-x: auto;
+    padding: 10px;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #1abc9c,#1abc9c,#00acc1);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    box-sizing: border-box;
+    position: relative;
+"></div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxV5J7Wz_g0gv42U0g6sxDh18XdXB4kISSWOsagu-RCMJS3Ak_-LZH83tqLpJe2swUF/exec";
+
+function getInitials(name) {
+    const parts = name.split(" ");
+    return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
+}
+
+function randomColor(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash) % 360;
+    return `hsl(${hue}, 70%, 50%)`;
+}
+
+function createTooltip(text) {
+    const tooltip = document.createElement("div");
+    tooltip.textContent = text;
+    tooltip.style.cssText = `
+        position: absolute;
+        background: rgba(0,0,0,0.85);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(5px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+        z-index: 9999;
+    `;
+    document.body.appendChild(tooltip);
+    return tooltip;
+}
+
+function updateOnlineUsers() {
+    fetch(SCRIPT_URL)
+    .then(res => res.json())
+    .then(data => {
+        const container = document.getElementById("online-users-container");
+        container.innerHTML = "";
+
+        if (data.success && data.users.length) {
+            data.users.forEach(user => {
+                const circle = document.createElement("div");
+                circle.textContent = getInitials(user.name);
+                circle.style.cssText = `
+                    min-width: 40px;
+                    min-height: 40px;
+                    border-radius: 50%;
+                    background: ${randomColor(user.name)};
+                    color: white;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 16px;
+                    font-weight: bold;
+                    cursor: default;
+                    flex-shrink: 0;
+                    position: relative;
+                `;
+
+                const tooltip = createTooltip(user.name);
+
+                circle.addEventListener("mouseenter", (e) => {
+                    const rect = circle.getBoundingClientRect();
+                    tooltip.style.top = `${rect.bottom + 6}px`; // below the circle
+                    tooltip.style.left = `${rect.left + rect.width/2 - tooltip.offsetWidth/2}px`;
+                    tooltip.style.opacity = 1;
+                    tooltip.style.transform = "translateY(0)";
+                });
+
+                circle.addEventListener("mouseleave", () => {
+                    tooltip.style.opacity = 0;
+                    tooltip.style.transform = "translateY(5px)";
+                });
+
+                container.appendChild(circle);
+            });
+        }
+    })
+    .catch(err => console.error("Error fetching online users:", err));
+}
+
+// Initial load
+updateOnlineUsers();
+// Auto-refresh every 30s
+setInterval(updateOnlineUsers, 30000);
+</script>
