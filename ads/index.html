@@ -41,6 +41,31 @@
 </head>
 <body>
 
+  <script>
+    (function(){
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAVShrbdYKHYLYvE1EeBxXV0Nj9uyqL9Jsn1iW-lC3faCJX6dUaEarSDr2awgCu4U/exec";
+
+  const userData = JSON.parse(localStorage.getItem("penguadoUser")); // {uuid, name}
+  if (!userData || !userData.uuid) { console.error("No UUID in localStorage"); return; }
+
+  function sendHeartbeat() {
+  const url = `${SCRIPT_URL}?uuid=${encodeURIComponent(userData.uuid)}&name=${encodeURIComponent(userData.name)}`;
+  fetch(url)
+    .then(res => res.json())
+    .then(console.log)
+    .catch(err => {
+      console.error("Heartbeat error:", err);
+      setTimeout(sendHeartbeat, 5000); // retry after 5s
+    });
+}
+
+
+  sendHeartbeat();
+  setInterval(sendHeartbeat, 5000);
+
+})();
+  </script>
+
   <!-- Top Banner -->
   <div id="ad-top" class="ad-container">
     <script>
