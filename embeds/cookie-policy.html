@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<head>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/v6hRy4d3/Penguado-Favicon-Bright.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penguado Cookie Terms</title>
+
+ </head>
+<style>
+  body{
+  	font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  
+  .buttonClass{
+  	width: 80px;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    background: linear-gradient(45deg, #1abc9c,#1abc9c,#00acc1);
+    align-items: center;
+    font-weight: bold;
+  	color: white;
+    overflow: hidden; /*eliminates scrolling */
+  	font-size: 15px;
+
+  }
+  
+  .buttonClass:hover{
+  animation-name: enlargeAnimation; /* Name of your @keyframes rule */
+  	animation-duration: 0.5s; /* How long the animation takes */
+  	animation-timing-function: ease-out; /* How the animation progresses (e.g., starts fast, ends slow) */
+  	animation-fill-mode: forwards;
+  }
+  
+  @keyframes enlargeAnimation {
+  0% {
+    transform: scale(1); /* Starting size */
+  }
+  100% {
+    transform: scale(1.1); /* Enlarged size, e.g., 150% */
+  }
+}
+  
+  .textClass{
+  	color: #1abc9c;
+    font-size: 15px;
+    allignment: centered;
+    text-align: center;
+  }
+</style>
+
+<html>
+  <div  class="textClass" id="main">  By using Penguado, you accept our Terms of Service, Privacy Policy, and Cookie Policy. <button id="acceptButton" class="buttonClass" onclick="acceptTerms()">Accept</button> </div>
+</html>
+
+<script>  
+  terms = localStorage.getItem("penguadoTermsAccepted");
+  const elementToHide = document.getElementById('main');
+  
+  if (terms == "false" || (terms === null)){
+    elementToHide.style.display = 'block';
+  } else {
+  	console.log(terms);
+    elementToHide.style.display = 'none';
+  }
+  
+  function acceptTerms(){
+  	localStorage.setItem("penguadoTermsAccepted", "true");
+    elementToHide.style.display = 'none';
+  }
+</script>
