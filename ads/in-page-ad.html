@@ -1,85 +1,85 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="referrer" content="no-referrer-when-downgrade" />
-  <title>Penguado Ads Embed</title>
+  <title>Ad Placement Example</title>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/v6hRy4d3/Penguado-Favicon-Bright.png">
   <style>
-    html, body {
+    body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
+      padding: 20px;
     }
-    .ad-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      width: 100%;
-      box-sizing: border-box;
+    .ad-container {
+      margin: 20px auto;
+      text-align: center;
+      border: 1px dashed #ccc;
       padding: 10px;
     }
-    .ad-slot {
-      flex: 1;
-      margin: 0 10px;
-      min-width: 150px; /* ensures scripts have enough space */
+    #ad-sidebar-left {
+      float: left;
+      width: 200px;
+      margin-right: 20px;
+    }
+    #ad-sidebar-right {
+      float: right;
+      width: 200px;
+      margin-left: 20px;
+    }
+    #content {
+      max-width: 600px;
+      margin: auto;
+      overflow: hidden;
+    }
+    footer {
+      clear: both;
       text-align: center;
-      display: block;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
 
-  <div class="ad-row">
-    <!-- Left Ad -->
-    <div class="ad-slot">
-      <script>
-        (function(dlwk){
-        var d = document,
-            s = d.createElement('script'),
-            l = d.scripts[d.scripts.length - 1];
-        s.settings = dlwk || {};
-        s.src = "\/\/mildgive.com\/bWXAVgsmd.G\/lT0oY-Whcb\/Ie\/mE9PuGZ\/U\/lFkZPBTVYD2qNJjdAM3wNPzbQstsNujiYW2bMzDScx3GNZQt";
-        s.async = true;
-        s.referrerPolicy = 'no-referrer-when-downgrade';
-        l.parentNode.insertBefore(s, l);
-        })({})
-	  </script>
-    </div>
 
-    <!-- Center Ad -->
-    <div class="ad-slot">
-      <script>
-(function(pmbbgq){
-var d = document,
-    s = d.createElement('script'),
-    l = d.scripts[d.scripts.length - 1];
-s.settings = pmbbgq || {};
-s.src = "\/\/mildgive.com\/bQXaVesSd.Guld0\/YfWjcB\/beamc9fuPZcUSlnkjPPTFYe2UNajqAm4\/NmTJI_tBNLjDYj2tM\/DigY1\/MHwI";
-s.async = true;
-s.referrerPolicy = 'no-referrer-when-downgrade';
-l.parentNode.insertBefore(s, l);
-})({})
-</script>
-    </div>
-
-    <!-- Right Ad -->
-    <div class="ad-slot">
-      <script>
-(function(xeoew){
-var d = document,
-    s = d.createElement('script'),
-    l = d.scripts[d.scripts.length - 1];
-s.settings = xeoew || {};
-s.src = "\/\/mildgive.com\/bBXuVFsNd.GAlf0\/YgWRce\/ueAmX9YuvZnUblukGP\/TiYb2hNWj-A\/4zN\/DyQ\/taN\/jdY-2jMLDFgY0LN\/Qy";
-s.async = true;
-s.referrerPolicy = 'no-referrer-when-downgrade';
-l.parentNode.insertBefore(s, l);
-})({})
-</script>
-    </div>
+  <!-- Sidebar Left -->
+  <div id="ad-sidebar-left" class="ad-container">
+    <script>
+      (function(){
+        var d=document,s=d.createElement('script');
+        s.src="//mildgive.com/bIXtVzs.d/Gvl/0/YTWAc_/JePm/9WuMZFUFl/k/P/TqYE2YNVjqAC3/NezqQft/NUjXYi2/M_Dxc/3nNjQX";
+        s.async=true; s.referrerPolicy='no-referrer-when-downgrade';
+        document.currentScript.parentNode.appendChild(s);
+      })();
+    </script>
   </div>
+
+  <!-- Sidebar Right -->
+  <div id="ad-sidebar-right" class="ad-container">
+    <script>
+        (function(){
+          var d=document,s=d.createElement('script');
+          s.src="//mildgive.com/b/XPV/std.G/lJ0wYoWzcJ/QeWmG9/u/ZLUJlzkiP/TIYX2pNFjeA/4UN_TJIrtNNbjQY/2CMlDEgg1bMAwM";
+          s.async=true; s.referrerPolicy='no-referrer-when-downgrade';
+          document.currentScript.parentNode.appendChild(s);
+        })();
+      </script>
+  </div>
+
+  <!-- Main Content -->
+  <div id="content">
+    <!-- Middle of Content -->
+    <div id="ad-middle" class="ad-container">
+      <script>
+        (function(){
+          var d=document,s=d.createElement('script');
+          s.src="//mildgive.com/b.XfVZswd-GOlF0xYPWvcg/OePmO9IuTZvUrl/kaPNTAYz2/NKjFAm4jNwDFQMtvNSjSYS2/MWDCgb0xNFQx";
+          s.async=true; s.referrerPolicy='no-referrer-when-downgrade';
+          document.currentScript.parentNode.appendChild(s);
+        })();
+      </script>
+    </div>
+
 
 </body>
 </html>
