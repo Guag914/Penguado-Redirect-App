@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/v6hRy4d3/Penguado-Favicon-Bright.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penguado YouTube (Blue/Green Theme)</title>
+  <style>
+    /* ---------- BODY & BACKGROUND ---------- */
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(45deg, #FFFFFF, #FFFFFF);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  flex-direction: column;
+  overflow-x: hidden;
+  animation: bgShift 20s ease infinite;
+}
+    
+    html, body {
+    overflow: hidden; /* 🚫 disables scrollbars */
+    width: 100%;
+}
+
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ---------- WELCOME MESSAGE ---------- */
+#welcome-msg {
+  color: #158f8a;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* ---------- CONTAINER ---------- */
+.background-container {
+  background: linear-gradient(-45deg, #00acc1, #1abc9c);
+  border-radius: 25px;
+  padding: 50px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+  animation: fadeSlideIn 0.6s ease forwards;
+}
+
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- SEARCH CONTAINER ---------- */
+.search-container {
+  background: #1aa3a3;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  margin-bottom: 20px;
+  width: 100%;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.search-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+}
+
+/* ---------- INPUT FIELDS ---------- */
+input[type="text"] {
+  width: 70%;
+  padding: 12px;
+  border: 2px solid #158f8a;
+  border-radius: 12px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  background: #e0f7f7;
+  color: #004d4d;
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #00acc1;
+  box-shadow: 0 0 12px rgba(0, 172, 193, 0.4);
+  background: #ffffff;
+}
+
+/* ---------- BUTTONS ---------- */
+button {
+  position: relative;
+  background: linear-gradient(135deg, #1abc9c, #00acc1);
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  margin: 5px;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 172, 193, 0.35);
+  transition: all 0.35s ease;
+  overflow: hidden;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #00acc1, #26c6da);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 14px 28px rgba(38, 198, 218, 0.5);
+}
+
+/* Ripple effect on click */
+button::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  width: 100px;
+  height: 100px;
+  opacity: 0.3;
+  background: white;
+  pointer-events: none;
+  transition: transform 0.5s, opacity 1s;
+}
+
+button:active::after {
+  transform: scale(2);
+  opacity: 0;
+  transition: 0s;
+}
+
+/* ---------- VIDEO CONTAINER ---------- */
+.video-container {
+  width: 100%;
+  background: linear-gradient(45deg, #00acc1, #1abc9c);
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.video-wrapper {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 5px;
+  width: 100%;
+  aspect-ratio: 16/9;
+  position: relative;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.video-wrapper:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- IFRAME ---------- */
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+}
+
+/* ---------- HEADINGS ---------- */
+h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #ffffff;
+  transition: color 0.35s ease;
+}
+
+.search-container:hover h2 {
+  color: #e0f7f7;
+}
+
+
+  </style>
+</head>
+<body>
+  
+  <div id="welcome-msg"></div>
+
+  <div class="background-container" id="main-content">
+    <div class="search-container">
+      <h2>Penguado YouTube</h2>
+      <input type="text" id="searchBar" placeholder="Enter YouTube Video URL" />
+      <div>
+        <button onclick="loadVideo()">View Video</button>
+        <button onclick="downloadVideo()">Download Video</button>
+      </div>
+    </div>
+
+    <div class="video-container">
+      <div class="video-wrapper">
+        <iframe id="videoPlayer" src="" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function logItem(item) {
+  const penguadoName = JSON.parse(localStorage.getItem('penguadoUser'));
+  
+  if (!penguadoName || !penguadoName.uuid) {
+    console.error("No penguadoUser found in localStorage");
+    return;
+  }
+  
+  const uuid = penguadoName.uuid;
+  const LOG_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbS_1CuHaOpvUVdQe-NQWXf_JkreJzvmHywwsbrfwvAoqyaJVNWbXVKLsBxwSDPTwM/exec";
+  const loggingURL = `${LOG_SCRIPT_URL}?uuid=${encodeURIComponent(uuid)}&item=${encodeURIComponent(item)}`;
+  
+  fetch(loggingURL, { method: "GET" })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(err => {
+      document.getElementById('output').textContent = "Error: " + err;
+    });
+}
+    
+    const LOG_URL = "https://script.google.com/macros/s/AKfycbwYl_il9Cmpd6bwwbHESsj1Rij91BrC09tGZEApQot26uP73DlpGA7aISnuFEkL8WoW/exec";
+
+    // Check login state on page load
+    function checkAccess() {
+      let userData = null;
+      try {
+        userData = JSON.parse(localStorage.getItem("penguadoUser"));
+      } catch (e) {
+        console.error("Invalid penguadoUser format:", e);
+      }
+
+      if (userData && userData.uuid && userData.name) {
+        // Show welcome message and main content
+        document.getElementById('welcome-msg').textContent = `Welcome, ${userData.name}!`;
+        document.getElementById('main-content').style.display = 'flex';
+      } else {
+        // Redirect if not logged in
+        window.location.href = "https://html.cafe/x836352e3";
+      }
+    }
+
+
+    function loadVideo() {
+      const url = document.getElementById('searchBar').value;
+      let videoId = url.split('v=')[1];
+      if (videoId) {
+        const ampersandPosition = videoId.indexOf('&');
+        if (ampersandPosition !== -1) {
+          videoId = videoId.substring(0, ampersandPosition);
+        }
+        document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${videoId}`;
+        openFullscreen(`https://www.youtube.com/embed/${videoId}`);
+        fetch("https://api.ipify.org?format=json")
+          .then(res => res.json())
+          .then(data => logItem(url));
+      }
+    }
+
+    function downloadVideo() {
+      const url = document.getElementById('searchBar').value;
+      const videoId = url.split('v=')[1];
+      if (videoId) {
+        fetch("https://api.ipify.org?format=json")
+          .then(res => res.json())
+          .then(data => logToSheet(data.ip, url));
+        const downloadLink = `https://sites.google.com/westfordk12.us/a-penguado-lll-bms/d-mes-path-v/d-mes-path-d`;
+        window.open(downloadLink, '_blank');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', checkAccess);
+
+function openFullscreen(url) {
+  const newWin = window.open("", "_blank");
+  if (newWin) {
+    newWin.document.write(`
+      <html>
+        <head>
+          <link rel="icon" type="image/png" href="https://i.ibb.co/v6hRy4d3/Penguado-Favicon-Bright.png">
+          <title>Penguado Fullscreen Viewer</title>
+          <style>
+            html, body {
+              margin: 0;
+              padding: 0;
+              height: 100%;
+              width: 100%;
+              overflow: hidden;
+              background: black;
+            }
+            embed {
+              border: none;
+              width: 100%;
+              height: 100%;
+            }
+          </style>
+        </head>
+        <body>
+          <embed src="${url}" type="text/html" width="100%" height="100%">
+        </body>
+      </html>
+    `);
+    newWin.document.close();
+  } else {
+    alert("Popup blocked! Please allow popups for this site.");
+  }
+}
+  </script>
+</body>
+</html>
