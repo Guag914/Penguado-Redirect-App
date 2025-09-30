@@ -45,7 +45,8 @@ body {
 /* Content */
 .content {
   padding: 40px 20px;
-  align-items: center;
+max-width: 1000px;  /* control width */
+  margin: 0 auto;
 }
 
 .text-section, .embed-section {
