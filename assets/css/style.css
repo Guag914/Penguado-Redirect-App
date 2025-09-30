@@ -8,8 +8,7 @@ body {
   background: #ffffff;
   color: #222;
   line-height: 1.6;
-  max-width: 100%;  /* control width */
-  margin: 0 auto;
+  text-align: center; /* default center */
 }
 
 /* Banner */
@@ -47,16 +46,17 @@ body {
 /* Content */
 .content {
   padding: 40px 20px;
-max-width: 100%;  /* control width to full size of screen */
+  max-width: 1000px; /* limit width */
   margin: 0 auto;
 }
 
-.text-section, .embed-section {
-  margin-bottom: 40px;
-}
+/* Text Alignment Classes */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
 
-/* Button Class */
-.button.html {
+/* Button Base */
+.button {
   display: inline-block;
   background: #00bcd4;
   color: #fff;
@@ -66,25 +66,30 @@ max-width: 100%;  /* control width to full size of screen */
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  max-width: 100%;  /* control width */
-  margin: 0 auto;
+  width: auto;        /* shrink/grow with text */
+  max-width: 100%;    /* never overflow */
 }
 
-.button.html:hover {
+/* Button Hover */
+.button:hover {
   background: #0097a7;
   transform: scale(1.05);
 }
+
+/* Button Positioning */
+.btn-left   { display: block; text-align: left; }
+.btn-center { display: block; text-align: center; }
+.btn-right  { display: block; text-align: right; }
 
 /* Divider */
 .divider {
   height: 2px;
   background: linear-gradient(to right, #00bcd4, transparent);
-  margin: 40px 0;
+  margin: 40px auto;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.8s ease;
-  max-width: 100%;  /* control width */
-  margin: 0 auto;
+  width: 80%;
 }
 
 /* Footer */
