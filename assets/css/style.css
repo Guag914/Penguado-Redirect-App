@@ -76,6 +76,31 @@ body {
   transform: scale(1.05);
 }
 
+.button-outlined {
+  position: absolute;
+  top: 0;
+  left: 50%;                 /* center horizontally */
+  transform: translateX(-50%);
+  padding: 5px 5px;
+  background: transparent;    /* no fill */
+  color: #1abc9c;             /* text color matches gradient */
+  border: 2px solid; 
+  border-image: linear-gradient(45deg, #1abc9c, #00acc1) 1; /* gradient border */
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 9999;
+  width: 95%;
+  height: 50px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.button-outlined:hover {
+  background: linear-gradient(45deg, #1abc9c, #00acc1);
+  color: white; /* flip text color */
+  width: 98%;   /* subtle expand */
+}
+
 /* Button Positioning */
 .btn-left   { display: block; text-align: left; }
 .btn-center { display: block; text-align: center; }
