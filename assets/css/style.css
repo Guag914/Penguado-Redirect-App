@@ -78,7 +78,7 @@ body {
 
 .button-outlined {
   display: inline-block;
-  border-radius: 5px;;
+  border-radius: 5px;
   padding: 12px 24px;
   background: transparent; /* no fill */
   color: #1abc9c; 
