@@ -45,7 +45,7 @@ body {
 /* Content */
 .content {
   padding: 40px 20px;
-max-width: 1000px;  /* control width */
+max-width: 100%;  /* control width to full size of screen */
   margin: 0 auto;
 }
 
