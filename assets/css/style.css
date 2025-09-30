@@ -84,7 +84,7 @@ body {
 /* Divider */
 .divider {
   height: 2px;
-  background: linear-gradient(to right, #00bcd4, transparent);
+  background: linear-gradient(to right, #00bcd4, transparent,  #00bcd4);
   margin: 40px auto;
   opacity: 0;
   transform: translateY(20px);
