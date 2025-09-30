@@ -45,7 +45,7 @@ body {
 /* Content */
 .content {
   padding: 40px 20px;
-  margin: 0 auto;
+  align-items: center;
 }
 
 .text-section, .embed-section {
@@ -63,6 +63,7 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
+  align-items: center;
 }
 
 .button.html:hover {
@@ -78,6 +79,7 @@ body {
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.8s ease;
+  align-items: center;
 }
 
 /* Footer */
