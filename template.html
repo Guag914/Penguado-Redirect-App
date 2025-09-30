@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Penguado Template Page</title>
+  <title>Penguado Template</title>
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="assets/js/script.js" defer></script>
 </head>
 <body>
 
-  <!-- Banner Section -->
+  <!-- Banner -->
   <header class="banner">
     <div class="banner-overlay">
       <h1 class="page-title">Page Title</h1>
@@ -17,41 +17,36 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Content -->
   <main class="content">
-    <section class="text-section">
-      <h2>Content Section</h2>
-      <p>
-        This is a space for text, embeds, or other media content.  
-        You can drop in YouTube embeds, text blocks, or widgets here.
-      </p>
-      <button class="button html">Example Button</button>
+
+    <section>
+      <p class="text-left">This text is aligned left.</p>
+      <p class="text-center">This text is centered.</p>
+      <p class="text-right">This text is aligned right.</p>
     </section>
 
-    <!-- Divider -->
     <div class="divider"></div>
 
-    <section class="embed-section">
-      <h2>Embed Section</h2>
-      <div class="embed-placeholder">
-        <!-- Example Embed -->
-        <iframe width="560" height="315" 
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-          title="YouTube video player" 
-          frameborder="0" 
-          allowfullscreen>
-        </iframe>
+    <section>
+      <div class="btn-left">
+        <button class="button">Left Button</button>
+      </div>
+      <div class="btn-center">
+        <button class="button">Center Button</button>
+      </div>
+      <div class="btn-right">
+        <button class="button">Right Button</button>
       </div>
     </section>
+
   </main>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
       <p>© 2025 Penguado. All rights reserved.</p>
-      <div class="footer-embed">
-        <!-- Place for footer embeds -->
-      </div>
+      <div class="footer-embed"><!-- embeds go here --></div>
     </div>
   </footer>
 
