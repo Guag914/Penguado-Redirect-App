@@ -1,1 +1,103 @@
+/* Penguado Universal Styling */
 
+/* Fonts */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* Banner */
+.banner {
+  position: relative;
+  background: url('../images/page-thumbnail.jpg') center/cover no-repeat;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-overlay {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 20px 40px;
+  border-radius: 10px;
+  text-align: center;
+  animation: fadeIn 1.5s ease;
+}
+
+.page-title {
+  color: #fff;
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.title-underline {
+  width: 80px;
+  height: 4px;
+  background: #00bcd4;
+  margin: 15px auto 0 auto;
+  border-radius: 2px;
+}
+
+/* Content */
+.content {
+  padding: 40px 20px;
+}
+
+.text-section, .embed-section {
+  margin-bottom: 40px;
+}
+
+/* Button Class */
+.button.html {
+  display: inline-block;
+  background: #00bcd4;
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button.html:hover {
+  background: #0097a7;
+  transform: scale(1.05);
+}
+
+/* Divider */
+.divider {
+  height: 2px;
+  background: linear-gradient(to right, #00bcd4, transparent);
+  margin: 40px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+
+/* Footer */
+.footer {
+  background: #f7f7f7;
+  padding: 20px;
+  text-align: center;
+  border-top: 2px solid #e0e0e0;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.footer-embed {
+  margin-top: 15px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
