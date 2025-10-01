@@ -60,10 +60,13 @@
 </body>
 
   <script>
-  fetch("../navigation.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("nav-placeholder").innerHTML = data;
-    });
+  window.addEventListener("scroll", function() {
+    const nav = document.querySelector(".penguado-nav");
+    if (window.scrollY > 0) {
+      nav.classList.add("scrolled");
+    } else {
+      nav.classList.remove("scrolled");
+    }
+  });
 </script>
 </html>
