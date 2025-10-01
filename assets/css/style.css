@@ -97,6 +97,10 @@ body {
   box-shadow: 0 6px 18px rgba(0, 137, 123, 0.3);
 }
 
+.out-btn-left   { display: block; text-align: left; }
+.out-btn-center { display: block; text-align: center; }
+.out-btn-right  { display: block; text-align: right; }
+
 /* Button Positioning */
 .btn-left   { display: block; text-align: left; }
 .btn-center { display: block; text-align: center; }
