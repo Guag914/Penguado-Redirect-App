@@ -9,6 +9,8 @@
 </head>
 <body>
 
+  <!-- Nav Bar -->
+  <div id="nav-placeholder"></div>
   <!-- Banner -->
   <header class="banner">
     <div class="banner-overlay">
@@ -56,4 +58,12 @@
   </footer>
 
 </body>
+
+  <script>
+  fetch("../navigation.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("nav-placeholder").innerHTML = data;
+    });
+</script>
 </html>
