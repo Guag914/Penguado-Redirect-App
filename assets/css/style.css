@@ -144,8 +144,9 @@ body {
 
 /* Penguado Navigation Bar */
 
+/* Default: transparent */
 .penguado-nav {
-  background: linear-gradient(90deg, #00897b, #1abc9c);
+  background: transparent;
   padding: 0.5em 1em;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: fixed;
@@ -153,6 +154,23 @@ body {
   left: 0;
   right: 0;
   z-index: 9999;
+  transition: background 0.3s ease;
+}
+
+/* Scrolled state with fade animation */
+.penguado-nav.scrolled {
+  animation: fadeInBg 0.4s forwards;
+  background: linear-gradient(90deg, #00897b, #1abc9c);
+}
+
+/* Keyframes for background fade */
+@keyframes fadeInBg {
+  from {
+    background: transparent;
+  }
+  to {
+    background: linear-gradient(90deg, #00897b, #1abc9c);
+  }
 }
 
 .penguado-nav ul {
