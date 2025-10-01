@@ -37,11 +37,10 @@ body {
 }
 
 .title-underline {
-  width: 80px;
-  height: 4px;
+  width: 100px;
+  height: 8px;
   background: #00897b; /* Aristotle accent */
   margin: 15px auto 0 auto;
-  border-radius: 2px;
 }
 
 /* Content */
