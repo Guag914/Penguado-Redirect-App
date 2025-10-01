@@ -1,14 +1,14 @@
-/* Penguado Universal Styling */
+/* Penguado Aristotle-Inspired Universal Styling */
 
-/* Fonts */
+/* Fonts & Base */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
   padding: 0;
   background: #ffffff;
-  color: #222;
+  color: #333333;
   line-height: 1.6;
-  text-align: center; /* default center */
+  text-align: center;
 }
 
 /* Banner */
@@ -24,7 +24,7 @@ body {
 .banner-overlay {
   background: rgba(0, 0, 0, 0.4);
   padding: 20px 40px;
-  border-radius: 10px;
+  border-radius: 12px;
   text-align: center;
   animation: fadeIn 1.5s ease;
 }
@@ -33,12 +33,13 @@ body {
   color: #fff;
   font-size: 2.5rem;
   margin: 0;
+  font-weight: 600;
 }
 
 .title-underline {
   width: 80px;
   height: 4px;
-  background: #00bcd4;
+  background: #00897b; /* Aristotle accent */
   margin: 15px auto 0 auto;
   border-radius: 2px;
 }
@@ -46,7 +47,7 @@ body {
 /* Content */
 .content {
   padding: 40px 20px;
-  max-width: 1000px; /* limit width */
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -55,10 +56,10 @@ body {
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 
-/* Button Base */
+/* Solid Buttons */
 .button {
   display: inline-block;
-  background: #00bcd4;
+  background: #00897b;
   color: #fff;
   padding: 12px 24px;
   font-size: 1rem;
@@ -66,36 +67,34 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: auto;        /* shrink/grow with text */
-  max-width: 100%;    /* never overflow */
+  width: auto;
+  max-width: 100%;
+  box-shadow: 0 4px 14px rgba(0, 137, 123, 0.25);
 }
 
-/* Button Hover */
 .button:hover {
-  background: #0097a7;
-  transform: scale(1.05);
+  background: #00796b;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 22px rgba(0, 137, 123, 0.35);
 }
 
+/* Outlined Buttons */
 .button-outlined {
   display: inline-block;
-  border-radius: 5px;
   padding: 12px 24px;
-  background: transparent; /* no fill */
-  color: #1abc9c; 
-  border: 3px solid;  /* <-- thicker border */
-  border-image: linear-gradient(45deg, #1abc9c, #00acc1) 1;
-  border-radius: 5px;
+  background: transparent;
+  color: #00897b;
+  border: 2px solid #00897b;
+  border-radius: 12px; /* rounded corners */
   cursor: pointer;
   transition: all 0.3s ease;
-  width: auto;
-  height: auto;
 }
 
-/* Hover effect */
 .button-outlined:hover {
-  background: linear-gradient(45deg, #1abc9c, #00acc1);
-  color: white;
-  transform: scale(1.05);
+  background: #00897b;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 137, 123, 0.3);
 }
 
 /* Button Positioning */
@@ -106,12 +105,13 @@ body {
 /* Divider */
 .divider {
   height: 2px;
-  background: linear-gradient(to right, #00bcd4, transparent,  #00bcd4);
+  background: linear-gradient(to right, transparent, #00897b, transparent);
   margin: 40px auto;
+  width: 80%;
+  border-radius: 1px;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.8s ease;
-  width: 80%;
 }
 
 /* Footer */
@@ -125,6 +125,7 @@ body {
 .footer p {
   margin: 0;
   font-size: 0.9rem;
+  color: #555555;
 }
 
 .footer-embed {
@@ -134,5 +135,5 @@ body {
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
