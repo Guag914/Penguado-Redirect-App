@@ -184,6 +184,7 @@ body {
   display: flex;
   align-items: center;
   gap: 1em;
+  margin-right: 1.5em;
 }
 
 .nav-right a {
@@ -191,7 +192,6 @@ body {
   color: white;
   padding: 0.5em 0.75em;
   border-radius: 4px;
-  margin-right: 1em;
 }
 
 .nav-right a:hover {
