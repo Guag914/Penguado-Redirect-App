@@ -1,29 +1,31 @@
-<!-- navigation.html -->
-<nav class="penguado-nav"> 
-  <ul>
-    <li>
+<nav class="penguado-nav">
+  <ul class="nav-container">
+    <!-- Left side: logo + text -->
+    <li class="nav-left">
       <a href="index.html" style="display: flex; align-items: center; gap: 0.5em;">
-        <img src="../assets/images/logo.jpg" style="height: 20px; width: auto;">
+        <img src="../assets/images/logo.jpg" style="height: 30px; width: auto;">
         <span style="font-weight: bold;">Penguado</span>
       </a>
     </li>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="../main-pages/login-signup/index.html">Login & Signup</a></li>
-    <li><a href="../main-pages/profile.html">Profile</a></li>
-    <li><a href="../main-pages/about/index.html">About</a></li>
-    <li><a href="../main-pages/support-us/index.html">Support Us</a></li>
-    <li><a href="../main-pages/apps.html">Apps</a></li>
-    <li><a href="../main-pages/games.html">Games</a></li>
-    <li><a href="../main-pages/video-player/index.html">Video Player</a></li>
-    <li>
-      <a href="#">Other ▾</a>
-      <ul class="dropdown">
-        <li><a href="../main-pages/other/online-html-editor/index.html">Online HTML Editor</a></li>
-        <li><a href="../main-pages/other/alternate-links.html">Alternate Links</a></li>
-        <li><a href="../main-pages/other/disable-blocksi.html">Disable Blocksi</a></li>
-      </ul>
+
+    <!-- Right side: navigation links -->
+    <li class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="../main-pages/login-signup/index.html">Login & Signup</a>
+      <a href="../main-pages/profile.html">Profile</a>
+      <a href="../main-pages/about/index.html">About</a>
+      <a href="../main-pages/support-us/index.html">Support Us</a>
+      <a href="../main-pages/apps.html">Apps</a>
+      <a href="../main-pages/games.html">Games</a>
+      <a href="../main-pages/video-player/index.html">Video Player</a>
+      <span class="dropdown-container">
+        <a href="#">Other ▾</a>
+        <ul class="dropdown">
+          <li><a href="../main-pages/other/online-html-editor/index.html">Online HTML Editor</a></li>
+          <li><a href="../main-pages/other/alternate-links.html">Alternate Links</a></li>
+          <li><a href="../main-pages/other/disable-blocksi.html">Disable Blocksi</a></li>
+        </ul>
+      </span>
     </li>
   </ul>
 </nav>
-
-<link rel="stylesheet" href="navigation.css">
