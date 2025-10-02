@@ -105,6 +105,16 @@ body {
 .btn-center { display: block; text-align: center; }
 .btn-right  { display: block; text-align: right; }
 
+/* Add this to your CSS */
+.button-row {
+  display: flex;          /* aligns buttons in a row */
+  justify-content: center; /* centers the row horizontally */
+  align-items: center;    /* vertically aligns buttons if they have different heights */
+  gap: 1em;               /* space between buttons */
+  flex-wrap: wrap;        /* allows wrapping on smaller screens */
+  margin: 20px 0;         /* optional spacing above and below row */
+}
+
 /* Divider */
 .divider {
   height: 2px;
