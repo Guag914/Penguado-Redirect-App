@@ -125,21 +125,23 @@ body {
 
 .footer-content {
   display: flex;
-  justify-content: space-between; /* left and right sides */
-  align-items: center;            /* vertical alignment */
-  flex-wrap: wrap;                /* allow wrapping on small screens */
+  justify-content: space-between; /* pushes left and right apart */
+  align-items: flex-start;        /* top-aligns sections */
+  flex-wrap: wrap;                /* allow stacking on small screens */
+  gap: 20px;                      /* space between sections */
 }
 
 .footer p {
-  margin: 0;
+  margin: 0 0 8px; /* space between lines */
   font-size: 0.9rem;
   color: #555555;
 }
 
 .footer-embed {
+  flex-basis: 100%; /* pushes embeds onto a new row */
   margin-top: 15px;
-  flex-basis: 100%; /* makes embed drop below if needed */
 }
+
 
 
 /* Animations */
