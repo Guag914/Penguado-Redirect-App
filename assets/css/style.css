@@ -125,20 +125,26 @@ body {
 
 .footer-content {
   display: flex;
-  justify-content: space-between; /* pushes left and right apart */
-  align-items: flex-start;        /* top-aligns sections */
-  flex-wrap: wrap;                /* allow stacking on small screens */
-  gap: 20px;                      /* space between sections */
+  justify-content: space-between; /* left column & right column */
+  align-items: flex-start;        /* align them at the top */
+  flex-wrap: wrap;                /* stack on smaller screens */
+}
+
+.text-left,
+.text-right {
+  display: flex;
+  flex-direction: column;  /* stack their child <p> vertically */
+  gap: 6px;                /* spacing between lines */
 }
 
 .footer p {
-  margin: 0 0 8px; /* space between lines */
+  margin: 0;
   font-size: 0.9rem;
   color: #555555;
 }
 
 .footer-embed {
-  flex-basis: 100%; /* pushes embeds onto a new row */
+  flex-basis: 100%; /* ensures embed goes below both columns */
   margin-top: 15px;
 }
 
