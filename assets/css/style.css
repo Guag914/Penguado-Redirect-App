@@ -81,11 +81,11 @@ body {
 .button-outlined {
   font-size: 1.15rem;
   display: inline-block;
-  padding: 12px 24px;
+  padding: 8px 24px;
   background: transparent;
   color: #00897b;
   border: 2px solid #00897b;
-  border-radius: 12px; /* rounded corners */
+  border-radius: 6px; /* rounded corners */
   cursor: pointer;
   transition: all 0.3s ease;
 }
