@@ -152,13 +152,19 @@ body {
 
 /* Penguado Navigation Bar */
 .penguado-nav {
+  position: fixed;       /* Make navbar stay on top */
+  top: 0;
+  left: 0;
+  width: 100%;
   background-color: #1abc9c;
-  padding: 0.5em 1em;
+  padding: 0.75em 2em;   /* extra padding top/bottom and left/right */
+  z-index: 9999;         /* stays above all other content */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .nav-container {
   display: flex;
-  justify-content: space-between; /* left & right alignment */
+  justify-content: space-between;  /* left + right alignment */
   align-items: center;
   list-style: none;
   margin: 0;
@@ -166,14 +172,29 @@ body {
 }
 
 .nav-left a {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
   text-decoration: none;
   color: white;
+  font-weight: bold;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1em;
 }
 
 .nav-right a {
-  margin-left: 1em;
   text-decoration: none;
   color: white;
+  padding: 0.5em 0.75em;
+  border-radius: 4px;
+}
+
+.nav-right a:hover {
+  background-color: rgba(255,255,255,0.2);
 }
 
 .dropdown-container {
@@ -185,10 +206,12 @@ body {
   position: absolute;
   top: 100%;
   left: 0;
-  background: #16a085;
+  min-width: 200px;           /* ensures dropdown is wide enough */
+  background-color: #16a085;
   list-style: none;
   padding: 0.5em 0;
   margin: 0;
+  border-radius: 4px;
 }
 
 .dropdown li a {
@@ -198,6 +221,17 @@ body {
   text-decoration: none;
 }
 
+.dropdown li a:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+/* show dropdown on hover */
 .dropdown-container:hover .dropdown {
   display: block;
+}
+
+/* Prevent dropdown from going off screen */
+.dropdown-container .dropdown {
+  right: 0;
+  left: auto;
 }
