@@ -1,26 +1,16 @@
 function handleScroll() {
-  const elements = document.querySelectorAll("*"); // universal, matches everything
+  const elements = document.querySelectorAll("*:not(.penguado-nav):not(.penguado-nav *)");
   elements.forEach(el => {
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight - 100 && rect.bottom > 0) {
       el.classList.add("fade-in");
+      el.classList.remove("fade-out");
     } else {
-      el.classList.remove("fade-in"); // remove so it re-triggers when scrolled back
+      el.classList.remove("fade-in");
+      el.classList.add("fade-out");
     }
   });
 }
 
-fetch("navigation.html")
-  .then(response => response.text())
-  .then(data => {
-    const navPlaceholder = document.getElementById("nav-placeholder");
-    navPlaceholder.innerHTML = data;
-
-    // Add fade-in class once it’s loaded
-    const nav = navPlaceholder.querySelector(".penguado-nav");
-    if (nav) nav.classList.add("fade-in");
-  });
-
-
 document.addEventListener("scroll", handleScroll);
-window.addEventListener("load", handleScroll); // run on page load
+window.addEventListener("load", handleScroll);
