@@ -2,10 +2,11 @@
 
 /* Fonts & Base */
 
-.fade-target {
+* {
   opacity: 0;
 }
 
+/* Show animation */
 .show {
   animation: var(--fadeAnim, fadeIn) 1s ease forwards;
 }
