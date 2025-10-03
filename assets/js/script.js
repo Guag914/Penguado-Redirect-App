@@ -1,5 +1,5 @@
 document.addEventListener("scroll", () => {
-  const dividers = document.querySelectorAll(".divider");
+  const dividers = document.querySelectorAll("*");
   dividers.forEach(divider => {
     const rect = divider.getBoundingClientRect();
     if (rect.top < window.innerHeight - 100) {
