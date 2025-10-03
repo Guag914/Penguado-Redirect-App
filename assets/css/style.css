@@ -2,13 +2,11 @@
 
 /* Fonts & Base */
 
-/* hide everything by default */ 
-* {
+.fade-target {
   opacity: 0;
 }
 
-/* .show triggers animation, direction controlled by a data attribute */
-*.show {
+.show {
   animation: var(--fadeAnim, fadeIn) 1s ease forwards;
 }
 
