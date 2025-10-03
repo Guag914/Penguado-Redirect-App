@@ -3,11 +3,6 @@
 /* Fonts & Base */
 
 * {
-  opacity: 1;
-}
-
-/* .show triggers animation, uses fadeIn for scroll down, fadeInUp for scroll up */
-*.show {
   animation: fadeIn 1s ease forwards;
 }
 
