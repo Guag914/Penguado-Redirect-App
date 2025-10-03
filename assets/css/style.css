@@ -15,7 +15,7 @@ body {
 .banner {
   position: relative;
   background: url('../images/page-thumbnail.jpg') center/cover no-repeat;
-  height: 345px;
+  height: 385px;
   display: flex;
   align-items: center;
   justify-content: center;
