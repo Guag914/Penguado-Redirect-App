@@ -3,7 +3,7 @@
 /* Fonts & Base */
 
 * {
-  opacity: 0;
+  opacity: 1;
 }
 
 /* .show triggers animation, uses fadeIn for scroll down, fadeInUp for scroll up */
