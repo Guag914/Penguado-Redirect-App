@@ -29,6 +29,8 @@ body {
   color: #333333;
   line-height: 1.6;
   text-align: center;
+
+  padding-top: 70px; /*To account for the nav bar hieght*/
 }
 
 /* Banner */
