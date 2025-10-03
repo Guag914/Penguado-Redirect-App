@@ -4,33 +4,24 @@ document.addEventListener("scroll", () => {
   const currentScrollY = window.scrollY;
   const direction = (currentScrollY > lastScrollY) ? "down" : "up";
 
-  // Fade in all elements
   document.querySelectorAll("body *").forEach(el => {
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight && rect.bottom > 0) {
-      // element is in viewport
+      // set animation direction via CSS variable
+      el.style.setProperty('--fadeAnim', direction === 'down' ? 'fadeIn' : 'fadeInUp');
 
-      // reset animation so it can replay
-      el.style.animation = "none";
+      // remove and re-add .show to restart animation
+      el.classList.remove('show');
       void el.offsetWidth; // force reflow
-
-      if (direction === "down") {
-        el.style.removeProperty("animation"); // uses *.show -> fadeIn
-      } else {
-        el.style.animation = "fadeInUp 1s ease forwards";
-      }
-
-      el.classList.add("show");
+      el.classList.add('show');
     } else {
-      // remove show to allow re-triggering when re-entering
-      el.classList.remove("show");
-      el.style.removeProperty("animation");
+      el.classList.remove('show');
     }
   });
 
   lastScrollY = currentScrollY;
 
-  // Divider logic (keep your existing)
+  // Divider logic (keep existing)
   const dividers = document.querySelectorAll(".divider");
   dividers.forEach(divider => {
     const rect = divider.getBoundingClientRect();
@@ -38,12 +29,5 @@ document.addEventListener("scroll", () => {
       divider.style.opacity = "1";
       divider.style.transform = "translateY(0)";
     }
-  });
-});
-
-// Example button interaction (unchanged)
-document.querySelectorAll(".button.html").forEach(btn => {
-  btn.addEventListener("click", () => {
-    alert("Penguado button clicked!");
   });
 });
