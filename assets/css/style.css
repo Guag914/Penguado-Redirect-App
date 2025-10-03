@@ -2,10 +2,16 @@
 
 /* Fonts & Base */
 
+/* hide everything by default */
 * {
-  animation-name: fadeIn;
-  animation-duration: 1s;
+  opacity: 0;
 }
+
+/* default .show uses your existing fadeIn animation (scrolling down) */
+*.show {
+  animation: fadeIn 1s ease forwards;
+}
+
 
 body {
   font-family: 'Roboto', Arial, sans-serif;
@@ -163,6 +169,11 @@ body {
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
