@@ -15,7 +15,11 @@
   transform: translateY(0) !important;
 }
 
-
+/* Fade out when scrolled away */
+.fade-out {
+  opacity: 0 !important;
+  transform: translateY(40px) !important;
+}
 
 body {
   font-family: 'Roboto', Arial, sans-serif;
