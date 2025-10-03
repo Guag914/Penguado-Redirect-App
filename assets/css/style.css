@@ -190,6 +190,9 @@ body {
 
 /* Penguado Navigation Bar */
 .penguado-nav {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
   position: fixed;       /* Make navbar stay on top */
   top: 0;
   left: 0;
