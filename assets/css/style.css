@@ -7,9 +7,9 @@
   opacity: 0;
 }
 
-/* default .show uses your existing fadeIn animation (scrolling down) */
+/* .show triggers animation, direction controlled by a data attribute */
 *.show {
-  animation: fadeIn 1s ease forwards;
+  animation: var(--fadeAnim, fadeIn) 1s ease forwards;
 }
 
 
