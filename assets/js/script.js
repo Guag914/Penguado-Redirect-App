@@ -10,5 +10,17 @@ function handleScroll() {
   });
 }
 
+fetch("navigation.html")
+  .then(response => response.text())
+  .then(data => {
+    const navPlaceholder = document.getElementById("nav-placeholder");
+    navPlaceholder.innerHTML = data;
+
+    // Add fade-in class once it’s loaded
+    const nav = navPlaceholder.querySelector(".penguado-nav");
+    if (nav) nav.classList.add("fade-in");
+  });
+
+
 document.addEventListener("scroll", handleScroll);
 window.addEventListener("load", handleScroll); // run on page load
