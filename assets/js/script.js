@@ -1,14 +1,18 @@
 function handleScroll() {
-  const elements = document.querySelectorAll("*"); // universal, matches everything
+  const elements = document.querySelectorAll("*");
   elements.forEach(el => {
     const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 100 && rect.bottom > 0) {
+    const inView = rect.top < window.innerHeight - 100 && rect.bottom > 0;
+
+    if (inView) {
       el.classList.add("fade-in");
+      el.classList.remove("fade-out");
     } else {
-      el.classList.remove("fade-in"); // remove so it re-triggers when scrolled back
+      el.classList.remove("fade-in");
+      el.classList.add("fade-out");
     }
   });
 }
 
 document.addEventListener("scroll", handleScroll);
-window.addEventListener("load", handleScroll); // run on page load
+window.addEventListener("load", handleScroll);
