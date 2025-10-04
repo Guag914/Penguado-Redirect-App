@@ -21,6 +21,10 @@
   transform: translateY(10px) !important;
 }
 
+html, body{
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
