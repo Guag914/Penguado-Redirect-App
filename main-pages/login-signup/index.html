@@ -8,8 +8,11 @@
 	<meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Penguado - Login & Signup</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <script src="assets/js/script.js" defer></script>
+  
+	<!-- These will crash if not properly put in file structure -->
+	<link rel="stylesheet" href="../../assets/css/style.css">
+	<script src="../../assets/js/script.js" defer></script>
+
 </head>
 <body>
 <!-- Nav Bar -->
@@ -113,7 +116,7 @@
 
 <div class="divider"></div>
 
-<iframe src="../embeds/cookie-policy.html" style="width: 100%; height: 100%; border: none; padding-bottom: 20px; padding-top: 20px;"></iframe>
+<iframe src="../../embeds/cookie-policy.html" style="width: 100%; height: 100%; border: none; padding-bottom: 20px; padding-top: 20px;"></iframe>
 
   <!-- Footer DO NOT EDIT -->
   <footer class="footer" style="padding-bottom: 100px;">
@@ -144,13 +147,13 @@
       </div>
     </div>
 
-	<iframe src="../embeds/heartbeat.html" style="width: 10px; height: 10px; border: none;"></iframe>
+	<iframe src="../../embeds/heartbeat.html" style="width: 10px; height: 10px; border: none;"></iframe>
   </footer>
 
 </body>
 
   <script>
-  fetch("navigation.html")
+  fetch("../../navigation.html")
     .then(response => response.text())
     .then(data => {
       document.getElementById("nav-placeholder").innerHTML = data;
