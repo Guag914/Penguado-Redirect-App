@@ -1,9 +1,14 @@
 function handleScroll() {
-  const elements = document.querySelectorAll("*:not(.penguado-nav):not(.penguado-nav *)");
+  const elements = document.querySelectorAll("*");
   elements.forEach(el => {
+    // Check if element is the navbar or inside it
+    if (el.id === "penguado-nav" || el.closest("#penguado-nav")) {
+      el.style.opacity = "1";  // ensure navbar stays visible
+      return;                   // skip fade logic
+    }
+
     const rect = el.getBoundingClientRect();
 
-    // Allow elements up to 200px above viewport to fade in
     if (rect.top < window.innerHeight - 100 && rect.bottom > -200) {
       el.classList.add("fade-in");
       el.classList.remove("fade-out");
