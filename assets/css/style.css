@@ -211,7 +211,8 @@ body {
   align-items: center;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0px;
+  padding-bottom: 10px !important;
 }
 
 .nav-left a {
