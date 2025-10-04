@@ -5,8 +5,8 @@
 /* Universal fade setup */
 * {
   opacity: 0;  /* start hidden */
-  transform: translateY(-10px);
-  transition: opacity 1s ease, transform 1s ease;
+  transform: translateY(-30px);
+  transition: opacity 1s ease, transform 0.2s ease;
 }
 
 /* Class that JS will add */
@@ -18,7 +18,7 @@
 /* Fade out when scrolled away */
 .fade-out {
   opacity: 0 !important;
-  transform: translateY(10px) !important;
+  transform: translateY(0px) !important;
 }
 
 html, body{
