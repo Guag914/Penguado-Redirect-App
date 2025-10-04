@@ -103,7 +103,7 @@ body {
 
 /* Outlined Buttons */
 .button-outlined {
-  font-size: 1.15rem;
+  font-size: 0.95rem;
   display: inline-block;
   padding: 8px 24px;
   background: transparent;
