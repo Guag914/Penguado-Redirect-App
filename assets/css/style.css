@@ -3,23 +3,24 @@
 /* Fonts & Base */
 
 /* Universal fade setup */
-* {
-  opacity: 0;  /* start hidden */
+.fade-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: opacity 0.5s ease, transform 1s ease;
+}
+
+.fade-out {
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+  transition: opacity 0.5s ease, transform 1s ease;
+}
+
+.fade-init {
+  opacity: 0;
   transform: translateY(-20px);
   transition: opacity 0.5s ease, transform 1s ease;
 }
 
-/* Class that JS will add */
-.fade-in {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-/* Fade out when scrolled away */
-.fade-out {
-  opacity: 0 !important;
-  transform: translateY(20px) !important;
-}
 
 html, body{
   overflow-x: clip;
