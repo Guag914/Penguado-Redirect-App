@@ -50,7 +50,7 @@ body {
   padding: 20px 40px;
   border-radius: 12px;
   text-align: center;
-  animation: fadeIn 1.5s ease;
+  animation: fadeIn 0.5s ease;
 }
 
 .page-title {
@@ -180,12 +180,12 @@ body {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(-10px); }
+  from { opacity: 0; transform: translateY(-20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
