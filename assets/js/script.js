@@ -1,5 +1,5 @@
 function handleScroll() {
-  const elements = document.querySelectorAll("*");
+  const elements = document.querySelectorAll(".fade-init");
   elements.forEach(el => {
     // Check if element is the navbar or inside it
     if (el.id === "penguado-nav" || el.closest("#penguado-nav")) {
