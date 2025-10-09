@@ -1,1 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1869455728729943"
+     crossorigin="anonymous"></script>	
+<link rel="icon" type="image/jpg" href="../../assets/images/favicon.jpg">
+  
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penguado - Games</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/script.js" defer></script>
+</head>
+<body><!-- Nav Bar -->
+<div id="nav-placeholder"></div>
 
+<!-- Banner -->
+<header class="banner" style="height: 400px">
+  <div class="banner-overlay">
+    <h1 class="page-title">Penguado Games</h1>
+    <div class="title-underline"></div>
+  </div>
+</header>
+
+<div class="divider"></div>
+
+<!-- Buttons -->
+<div class="button-row">
+  <button style="width: 510px" class="button-outlined" onclick="window.location.href='../main-pages/support-us/index.html'">
+    Help Support Penguado
+  </button>
+  <button style="width: 510px" class="button-outlined" onclick="window.location.href='../main-pages/other/online-html-editor/add-penguado-game'">
+    How to Make a Game on Penguado
+  </button>
+</div>
+
+<div class="divider"></div>
+
+<main class="content">
+
+  <section class="fade-in">
+    <p style="margin-bottom: 20px;">
+      This feature is still developing! We are working towards a better solution to unreliable links. 
+      If you have any game suggestions, feel free to contact us at 
+      <a href="mailto:penguado.web@gmail.com" style="font-weight: bold; color: #00897b; text-decoration: none;">penguado.web@gmail.com</a>, 
+      or click <a href="https://docs.google.com/forms/d/e/1FAIpQLSflCjk3LJGbKFE3uZL41WD9VUDdDYfEPPXwhYnduLV0jhFifg/viewform" style="font-weight: bold; color: #00897b; text-decoration: none;">here</a> to submit a feedback form.
+    </p>
+
+    <p style="margin-bottom: 20px;">
+      If you would like to code your own game to submit to us, please submit your project URLs at the feedback form 
+      (HTML games only; GitHub/other similar websites are not allowed)! Penguado provides an online HTML editor for free which you can use as an alternative. 
+      For more information please check out our webpage about how to submit an HTML game for free! 
+      As of now, Penguado has reached over 1000 games, and will continue to grow rapidly!
+    </p>
+  </section>
+
+</main>
+
+<div class="divider"></div>
+
+<!-- Fullscreen Button Embed -->
+<section class="content fade-in">
+  <iframe src="../../embeds/games/fullscreen.html" style="width: 100%; height: 450px; border: none;"></iframe>
+</section>
+
+<div class="divider"></div>
+
+<!-- Indicator Bar -->
+<main class="content fade-in">
+  <p style="font-weight: bold; margin-bottom: 10px;">This bar indicates which Penguado users are online.</p>
+  <iframe src="../../embeds/indicator-bar.html" style="width: 100%; height: 50px; border: none;"></iframe>
+</main>
+
+<div class="divider"></div>
+
+<!-- Navigation Buttons at Bottom -->
+<div class="button-row">
+  <button style="width: 340px" class="button-outlined" onclick="window.location.href='../main-pages/apps.html'">Go to Apps</button>
+  <button style="width: 340px" class="button-outlined" onclick="window.location.href='../index.html'">Go Home</button>
+  <button style="width: 340px" class="button-outlined" onclick="window.location.href='../main-pages/video-player/index.html'">Go to Videos</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- Footer DO NOT EDIT -->
+<footer class="footer" style="padding-bottom: 100px;">
+  <div class="footer-content">
+    <div class="text-left">
+      <p style="font-size: 12px;">
+        © 2025 Penguado (https://penguado.top).<br>
+        All rights reserved. Unauthorized use of this code is prohibited. 
+        <a href="../about/license.html" style="font-weight: bold; color: #00897b; text-decoration: none;">View License</a><br><br>
+        We are working hard to improve your user experience.
+      </p>
+    </div>
+
+    <div class="text-right">
+      <p style="font-size: 12px;"><a href="https://docs.google.com/forms/d/e/1FAIpQLSflCjk3LJGbKFE3uZL41WD9VUDdDYfEPPXwhYnduLV0jhFifg/viewform?usp=header" style="font-weight: bold; color: #00897b; text-decoration: none;">Feedback</a></p>
+      <p style="font-size: 12px;"><a href="mailto:penguado.web@gmail.com" style="font-weight: bold; color: #00897b; text-decoration: none;">Contact us</a></p>
+      <p style="font-size: 12px;"><a href="../about/privacy-policy/index.html" style="font-weight: bold; color: #00897b; text-decoration: none;">Privacy Policy</a></p>
+      <p style="font-size: 12px;"><a href="../about/terms-of-service/index.html" style="font-weight: bold; color: #00897b; text-decoration: none;">Terms of Service</a></p>
+    </div>
+  </div>
+
+  <iframe src="../../embeds/heartbeat.html" style="width: 10px; height: 10px; border: none;"></iframe>
+</footer>
+</body>
+
+<script>
+  fetch("../../navigation.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("nav-placeholder").innerHTML = data;
+    });
+</script>
+</html>
