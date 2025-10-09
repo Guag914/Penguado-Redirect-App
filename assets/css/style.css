@@ -126,7 +126,7 @@ body {
 .divider {
   height: 1px;
   background: linear-gradient(to right, transparent, #00897b, #00897b, #00897b, #00897b, #00897b, #00897b,  transparent);
-  margin: 40px auto;
+  margin: 10px auto;
   width: 80%;
   border-radius: 1px;
   opacity: 1 !important;
