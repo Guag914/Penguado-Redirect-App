@@ -1,1 +1,95 @@
-<!-- SHOWN IN NAVIGATION -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1869455728729943"
+     crossorigin="anonymous"></script>	
+<link rel="icon" type="image/jpg" href="../../assets/images/favicon.jpg">
+  
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penguado - Profile</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/script.js" defer></script>
+</head>
+<body>
+<!-- Nav Bar -->
+<div id="nav-placeholder"></div>
+
+<!-- Banner -->
+<header class="banner" style="height: 400px">
+  <div class="banner-overlay">
+    <h1 class="page-title">Penguado Profile</h1>
+    <div class="title-underline"></div>
+  </div>
+</header>
+
+<div class="divider"></div>
+
+
+<!-- Profile Embed -->
+<section class="content">
+  <iframe src="../../../embeds/profile.html" style="width: 100%; height: 600px; border: none;"></iframe>
+</section>
+
+<div class="divider"></div>
+
+   <!-- Indicator Bar -->
+<section class="content text-center">
+  <p style="margin-bottom: 10px;">This bar indicates which Penguado users are online.</p>
+  <iframe src="../../embeds/indicator-bar.html" style="width: 100%; height: 100px; border: none;"></iframe>
+</section>
+
+<div class="divider"></div>
+
+<!-- Button Row #1: Navigation -->
+<div class="button-row">
+  <button style="width: 340px" class="button-outlined" onclick="window.location.href='../../main-pages/games.html'">Go to Games</button>
+  <button style="width: 340px" class="button-outlined" onclick="window.location.href='../../main-pages/apps.html'">Go to Apps</button>
+  <button style="width: 340px" class="button-outlined" onclick="window.location.href='../../main-pages/video-player/index.html'">Go to Video Player</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- Button Row #2: Help Support -->
+<div class="button-row">
+  <button style="width: 1020px" class="button-outlined" onclick="window.location.href='../../main-pages/support-us/index.html'">
+    Help Support Penguado — Minimal Ads, Maximum Speed
+  </button>
+</div>
+
+<div class="divider"></div>
+  	<iframe src="../embeds/cookie-policy.html" style="width: 100%; height: 100%; border: none; padding-bottom: 20px; padding-top: 20px;"></iframe>
+  
+
+<!-- Footer DO NOT EDIT -->
+<footer class="footer" style="padding-bottom: 100px;">
+  <div class="footer-content">
+    <div class="text-left">
+      <p style="font-size: 12px;">
+        © 2025 Penguado (https://penguado.top).<br>
+        All rights reserved. Unauthorized use of this code is prohibited. 
+        <a href="../about/license.html" style="font-weight: bold; color: #00897b; text-decoration: none;">View License</a><br><br>
+        We are working hard to improve your user experience.
+      </p>
+    </div>
+
+    <div class="text-right">
+      <p style="font-size: 12px;"><a href="https://docs.google.com/forms/d/e/1FAIpQLSflCjk3LJGbKFE3uZL41WD9VUDdDYfEPPXwhYnduLV0jhFifg/viewform?usp=header" style="font-weight: bold; color: #00897b; text-decoration: none;">Feedback</a></p>
+      <p style="font-size: 12px;"><a href="mailto:penguado.web@gmail.com" style="font-weight: bold; color: #00897b; text-decoration: none;">Contact us</a></p>
+      <p style="font-size: 12px;"><a href="../about/privacy-policy/index.html" style="font-weight: bold; color: #00897b; text-decoration: none;">Privacy Policy</a></p>
+      <p style="font-size: 12px;"><a href="../about/terms-of-service/index.html" style="font-weight: bold; color: #00897b; text-decoration: none;">Terms of Service</a></p>
+    </div>
+  </div>
+
+  <iframe src="../../embeds/heartbeat.html" style="width: 10px; height: 10px; border: none;"></iframe>
+</footer>
+</body>
+
+<script>
+  fetch("../../navigation.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("nav-placeholder").innerHTML = data;
+    });
+</script>
+</html>
