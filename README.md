@@ -63,7 +63,7 @@ For feedback, bug reports, or suggestions, feel free to:
 
 - Open an [Issue](https://github.com/Guag914/Penguado-Redirect-App/issues)
 - Submit a Pull Request
-- Reach out via [penguado.web@gmail.com](mailto:penguado.web@gmail.com) once the contact form is live
+- Reach out at [penguado.web@gmail.com](mailto:penguado.web@gmail.com) if you need any assistance
 
 ---
 
