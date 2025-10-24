@@ -60,7 +60,7 @@ body.dark .bubble code{background:rgba(255,255,255,0.1);}
 </footer>
 
 <script>
-const API_KEY = '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';
+const API_KEY = ${{ secrets.API_KEY}};
 const output = document.getElementById('output');
 
 /* Append chat message */
