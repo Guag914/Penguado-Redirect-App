@@ -76,21 +76,6 @@ function updateOnlineUsers() {
                     position: relative;
                 `;
 
-                const tooltip = createTooltip(user.name);
-
-                circle.addEventListener("mouseenter", (e) => {
-                    const rect = circle.getBoundingClientRect();
-                    tooltip.style.top = `${rect.bottom + 6}px`; // below the circle
-                    tooltip.style.left = `${rect.left + rect.width/2 - tooltip.offsetWidth/2}px`;
-                    tooltip.style.opacity = 1;
-                    tooltip.style.transform = "translateY(0)";
-                });
-
-                circle.addEventListener("mouseleave", () => {
-                    tooltip.style.opacity = 0;
-                    tooltip.style.transform = "translateY(5px)";
-                });
-
                 container.appendChild(circle);
             });
         }
