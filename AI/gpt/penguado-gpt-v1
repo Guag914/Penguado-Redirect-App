@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Penguado AI – Client‑side Memory</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/marked/marked.min.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<style>
+
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 1rem;
+  background: #fafafa;
+  transition: background 0.3s, color 0.3s;
+  color: #222;
+}
+body.dark {
+  background: #1e1e1e;
+  color: #e0e0e0;
+}
+
+h1 {
+  text-align: center;
+  margin: 1rem 0;
+  font-size: 1.8rem;
+  letter-spacing: -0.5px;
+}
+
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  background: #fff;
+  color: #222;
+  transition: border-color 0.2s;
+}
+.button-row {
+  display: flex;          /* aligns buttons in a row */
+  justify-content: center; /* centers the row horizontally */
+  align-items: center;    /* vertically aligns buttons if they have different heights */
+  gap: 1em;               /* space between buttons */
+  flex-wrap: wrap;        /* allows wrapping on smaller screens */
+  margin: 20px 0;         /* optional spacing above and below row */
+}
+
+textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+body.dark textarea { background: #2b2b2b; color: #e0e0e0; }
+
+.switch {
+  display: flex;
+  align-items: center;
+  margin: 0.4rem 0;
+}
+.switch input {
+  margin-right: 0.4rem;
+  transform: scale(1.2);
+}
+.switch label {
+  font-weight: 500;
+  cursor: pointer;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 0.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover { background: #0069d9; }
+button:disabled { background: #bbb; cursor: not-allowed; }
+
+#spinner {
+  display: none;
+  margin-left: 0.6rem;
+}
+.spinner {
+  width: 22px; height: 22px;
+  border: 3px solid #d3d3d3;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#output {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.4rem;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  max-height: 420px;
+  overflow-y: auto;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+body.dark #output {
+  background: #2b2b2b;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.interaction {
+  margin-bottom: 1.2rem;
+}
+
+.user-txt {
+  background: #e7f0ff;
+  border-left: 4px solid #007bff;
+  padding: 0.6rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+body.dark .user-txt {
+  background: #274c77;
+  border-color: #5aa1ff;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0.6rem 0;
+}
+body.dark hr { border-color: #444; }
+
+.assistant-txt {
+  background: #fff;
+  border-radius: 0.25rem;
+  padding: 0.6rem;
+  animation: fadeIn 0.4s ease-out;
+}
+body.dark .assistant-txt { background: #3c3c3c; color: #e0e0e0; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ---------- Responsive tweak ---------- */
+@media (max-width: 480px) {
+  textarea { font-size: 0.95rem; }
+  button { width: 100%; margin-top: 0.4rem; }
+  .switch { flex-wrap: wrap; }
+  .switch label { margin-left: 0.4rem; }
+}
+</style>
+</head>
+<body>
+
+<h1>Penguado AI</h1>
+
+<form id="chatForm">
+  <label for="prompt">Your prompt:</label><br>
+  <textarea id="prompt" placeholder="Type your prompt here…"></textarea>
+
+  <div class="button-row"> 
+    <div class="switch"><input type="checkbox" id="search_web"><label for="search_web">Search web</label></div>
+    <div class="switch"><input type="checkbox" id="functions_image"><label for="functions_image">Functions image</label></div>
+    <div class="switch"><input type="checkbox" id="interactive_app"><label for="interactive_app">Interactive app</label></div>
+    <div class="switch"><input type="checkbox" id="landing_page"><label for="landing_page">Landing page</label></div>
+    <div class="switch"><input type="checkbox" id="game2d"><label for="game2d">2D game</label></div>
+    <div class="switch"><input type="checkbox" id="game3d"><label for="game3d">3D game</label></div>
+  </div>
+
+  <button type="submit">Send ➤</button>
+  <span id="spinner"><div class="spinner"></div></span>
+</form>
+
+<div id="output"></div>
+
+<script>
+/* -------------------  CONFIG & HELPERS  --------------------- */
+const API_KEY = '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';   // ← replace with your key
+
+const MAX_HISTORY = 20;          // maximum number of messages stored
+const STORAGE_KEY = 'penguado_history'; // localStorage key
+
+function loadHistory() {
+  const json = localStorage.getItem(STORAGE_KEY);
+  return json ? JSON.parse(json) : [];
+}
+function saveHistory(history) { localStorage.setItem(STORAGE_KEY, JSON.stringify(history)); }
+
+// escape for display
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ---------------------------------  MAIN  --------------------------------- */
+document.getElementById('chatForm').onsubmit = async (e) => {
+  e.preventDefault();
+
+  const promptText = document.getElementById('prompt').value.trim();
+  if (!promptText) return;
+
+  const spinner = document.getElementById('spinner');
+  spinner.style.display = 'inline';
+
+  // 1️⃣ Load past history
+  const history = loadHistory();          // array of {role, content}
+
+  // 2️⃣ Build messages array that goes to OpenRouter
+  const systemMessage = {
+    role: 'system',
+    content: 'You are a helpful AI assistant. Remember the chat history but do NOT reveal it to the user.'
+  };
+  const allMessages = [systemMessage, ...history, { role: 'user', content: promptText }];
+
+  // 3️⃣ Send request
+  try {
+    const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEY}` },
+      body: JSON.stringify({
+        model: 'openai/gpt-oss-20b:free',
+        messages: allMessages,
+        temperature: 1.0,
+        search_web:      document.getElementById('search_web').checked,
+        functions_image: document.getElementById('functions_image').checked,
+        interactive_app: document.getElementById('interactive_app').checked,
+        landing_page:    document.getElementById('landing_page').checked,
+        game2d:          document.getElementById('game2d').checked,
+        game3d:          document.getElementById('game3d').checked
+      })
+    });
+
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(JSON.stringify(data, null, 2));
+
+    // 4️⃣ Append assistant reply to the UI
+    const assistantMessage = data?.choices?.[0]?.message?.content ?? '';
+    const replyHtml = `<div class="assistant-txt">${marked.parse(assistantMessage, { breaks: true, gfm: true })}</div>`;
+    const interactionHtml = `
+      <div class="interaction">
+        <div class="user-txt">${escapeHtml(promptText)}</div>
+        <hr>
+        ${replyHtml}
+      </div>`;
+    document.getElementById('output').innerHTML += interactionHtml;
+    document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
+
+    // 5️⃣ Update stored history (keep only most recent TOTAL messages)
+    const newEntry = [
+      { role: 'user', content: promptText },
+      { role: 'assistant', content: assistantMessage }
+    ];
+    const updatedHistory = [...history, ...newEntry];
+    if (updatedHistory.length > MAX_HISTORY) {
+      // keep the newest MAX_HISTORY messages
+      updatedHistory.splice(0, updatedHistory.length - MAX_HISTORY);
+    }
+    saveHistory(updatedHistory);
+
+    // clear prompt for next turn
+    document.getElementById('prompt').value = '';
+
+  } catch (err) {
+    alert('❌ ' + err.message);
+  } finally {
+    spinner.style.display = 'none';
+  }
+};
+</script>
+
+</body>
+</html>
