@@ -60,59 +60,53 @@ body.dark .bubble code{background:rgba(255,255,255,0.1);}
 </footer>
 
 <script>
-const API_KEY = ${{ API_KEY }};
 const output = document.getElementById('output');
 
 /* Append chat message */
-function addMessage(role, content){
-  const div=document.createElement('div');
-  div.className=`chat ${role}`;
-  const avatar=`<div class="avatar">${role==='user'?'U':'AI'}</div>`;
-  const bubble=`<div class="bubble">${marked.parse(content)}</div>`;
-  div.innerHTML=avatar + bubble;
+function addMessage(role, content) {
+  const div = document.createElement('div');
+  div.className = `chat ${role}`;
+  const avatar = `<div class="avatar">${role === 'user' ? 'U' : 'AI'}</div>`;
+  const bubble = `<div class="bubble">${marked.parse(content)}</div>`;
+  div.innerHTML = avatar + bubble;
   output.appendChild(div);
-  output.scrollTop=output.scrollHeight;
+  output.scrollTop = output.scrollHeight;
 }
 
 /* Theme toggle */
-document.getElementById('themeToggle').onclick=()=>{
+document.getElementById('themeToggle').onclick = () => {
   document.body.classList.toggle('dark');
-  const dark=document.body.classList.contains('dark');
-  document.getElementById('themeToggle').innerText=dark?'Light Mode':'Dark Mode';
+  const dark = document.body.classList.contains('dark');
+  document.getElementById('themeToggle').innerText = dark ? 'Light Mode' : 'Dark Mode';
 };
 
-/* Chat logic (no local storage, no loading overlay) */
-document.getElementById('chatForm').onsubmit = async (e)=>{
+/* Chat logic (with Cloudflare Worker) */
+document.getElementById('chatForm').onsubmit = async (e) => {
   e.preventDefault();
-  const prompt=document.getElementById('prompt').value.trim();
-  if(!prompt) return;
-  addMessage('user', prompt);
-  document.getElementById('prompt').value='';
+  const prompt = document.getElementById('prompt').value.trim();
+  if (!prompt) return;
 
-  const messages=[
-    {role:'system',content:'You are Penguado AI, a helpful, calm, and precise assistant.'},
-    {role:'user',content:prompt}
+  addMessage('user', prompt);
+  document.getElementById('prompt').value = '';
+
+  const messages = [
+    { role: 'system', content: 'You are Penguado AI, a helpful, calm, and precise assistant.' },
+    { role: 'user', content: prompt }
   ];
 
-  try{
-    const resp=await fetch('https://openrouter.ai/api/v1/chat/completions',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':`Bearer ${API_KEY}`
-      },
-      body:JSON.stringify({
-        model:'openai/gpt-oss-20b:free',
-        messages,
-        temperature:1.0
-      })
+  try {
+    const resp = await fetch('https://gpt-api.penguado-web.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages, temperature: 1.0 })
     });
 
-    const data=await resp.json();
-    if(!resp.ok) throw new Error(JSON.stringify(data,null,2));
-    const reply=data?.choices?.[0]?.message?.content||"";
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(JSON.stringify(data, null, 2));
+    const reply = data?.choices?.[0]?.message?.content || "No reply received.";
     addMessage('assistant', reply);
-  }catch(err){
+
+  } catch (err) {
     addMessage('assistant', `Error: ${err.message}`);
   }
 };
