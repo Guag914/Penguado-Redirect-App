@@ -163,9 +163,9 @@ body.dark .bubble code { background: rgba(255,255,255,0.1); }
   color: white;
   font-size: 1.1rem;
   z-index: 1000;
-  transition: opacity .3s ease;
   opacity: 0;
   pointer-events: none;
+  transition: opacity .3s ease;
 }
 #loadingOverlay.active {
   opacity: 1;
@@ -180,7 +180,6 @@ body.dark .bubble code { background: rgba(255,255,255,0.1); }
   margin-bottom: 1.2rem;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
 #loadingSteps {
   text-align: center;
   line-height: 1.6;
@@ -233,17 +232,19 @@ document.getElementById('themeToggle').onclick = () => {
   document.getElementById('themeToggle').innerText = dark ? 'Light Mode' : 'Dark Mode';
 };
 
-/* Loading animation steps */
-async function showLoadingSteps(steps) {
+/* Show overlay */
+function showOverlay(stepText) {
   overlay.classList.add('active');
-  for (const step of steps) {
-    stepsEl.textContent = step;
-    await new Promise(r => setTimeout(r, 700));
-  }
+  stepsEl.textContent = stepText;
 }
 
-/* Hide loading overlay */
-function hideLoading() {
+/* Update step text */
+function updateStep(stepText) {
+  stepsEl.textContent = stepText;
+}
+
+/* Hide overlay */
+function hideOverlay() {
   overlay.classList.remove('active');
 }
 
@@ -256,39 +257,41 @@ document.getElementById('chatForm').onsubmit = async (e) => {
   addMessage('user', prompt);
   document.getElementById('prompt').value = '';
 
-  const steps = [
-    "Contacting worker...",
-    "Retrieving API keys...",
-    "Calling AI model...",
-    "Generating response...",
-    "Retrieving response...",
-    "Final steps..."
-  ];
-
-  // Start steps in parallel
-  showLoadingSteps(steps);
-
-  const messages = [
-    { role: 'system', content: 'You are Penguado AI, a helpful, calm, and precise assistant.' },
-    { role: 'user', content: prompt }
-  ];
-
   try {
+    showOverlay("Contacting worker...");
+
+    const messages = [
+      { role: 'system', content: 'You are Penguado AI, a helpful, calm, and precise assistant.' },
+      { role: 'user', content: prompt }
+    ];
+
+    updateStep("Retrieving API keys...");
+    // Slight delay to make step noticeable
+    await new Promise(r => setTimeout(r, 300));
+
+    updateStep("Calling AI model...");
+    await new Promise(r => setTimeout(r, 200));
+
+    updateStep("Generating response...");
     const resp = await fetch('https://gpt-api.penguado-web.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages, temperature: 1.0 })
     });
 
+    updateStep("Retrieving response...");
     const data = await resp.json();
-    hideLoading();
 
-    if (!resp.ok) throw new Error(JSON.stringify(data, null, 2));
+    updateStep("Final steps...");
+    await new Promise(r => setTimeout(r, 300));
+
+    hideOverlay();
+
     const reply = data?.choices?.[0]?.message?.content || "No reply received.";
     addMessage('assistant', reply);
 
   } catch (err) {
-    hideLoading();
+    hideOverlay();
     addMessage('assistant', `Error: ${err.message}`);
   }
 };
