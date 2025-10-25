@@ -216,7 +216,7 @@ const stepsEl = document.getElementById('loadingSteps');
 
 /* -------------------  Local Storage History ------------------- */
 const STORAGE_KEY = 'penguado_history';
-const MAX_HISTORY = 20; // max number of messages to store
+const MAX_HISTORY = 100; // max number of messages to store
 
 function loadHistory() {
   const json = localStorage.getItem(STORAGE_KEY);
