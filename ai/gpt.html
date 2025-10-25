@@ -214,7 +214,25 @@ const output = document.getElementById('output');
 const overlay = document.getElementById('loadingOverlay');
 const stepsEl = document.getElementById('loadingSteps');
 
-/* Append chat message */
+/* -------------------  Local Storage History ------------------- */
+const STORAGE_KEY = 'penguado_history';
+const MAX_HISTORY = 20; // max number of messages to store
+
+function loadHistory() {
+  const json = localStorage.getItem(STORAGE_KEY);
+  return json ? JSON.parse(json) : [];
+}
+
+function saveHistory(history) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+}
+
+/* Escape HTML for safe display */
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ------------------- Chat UI ------------------- */
 function addMessage(role, content) {
   const div = document.createElement('div');
   div.className = `chat ${role}`;
@@ -225,30 +243,28 @@ function addMessage(role, content) {
   output.scrollTop = output.scrollHeight;
 }
 
-/* Theme toggle */
+/* ------------------- Theme toggle ------------------- */
 document.getElementById('themeToggle').onclick = () => {
   document.body.classList.toggle('dark');
   const dark = document.body.classList.contains('dark');
   document.getElementById('themeToggle').innerText = dark ? 'Light Mode' : 'Dark Mode';
 };
 
-/* Show overlay */
+/* ------------------- Loading Overlay ------------------- */
 function showOverlay(stepText) {
   overlay.classList.add('active');
   stepsEl.textContent = stepText;
 }
 
-/* Update step text */
 function updateStep(stepText) {
   stepsEl.textContent = stepText;
 }
 
-/* Hide overlay */
 function hideOverlay() {
   overlay.classList.remove('active');
 }
 
-/* Chat logic */
+/* ------------------- Chat Submission ------------------- */
 document.getElementById('chatForm').onsubmit = async (e) => {
   e.preventDefault();
   const prompt = document.getElementById('prompt').value.trim();
@@ -258,15 +274,18 @@ document.getElementById('chatForm').onsubmit = async (e) => {
   document.getElementById('prompt').value = '';
 
   try {
+    // Show initial overlay
     showOverlay("Contacting worker...");
 
-    const messages = [
-      { role: 'system', content: 'You are Penguado AI, a helpful, calm, and precise assistant.' },
-      { role: 'user', content: prompt }
-    ];
+    // Load past history
+    const history = loadHistory();
+    const systemMessage = {
+      role: 'system',
+      content: 'You are Penguado AI, a helpful, calm, and precise assistant. Remember chat history but do not reveal it to the user.'
+    };
+    const allMessages = [systemMessage, ...history, { role: 'user', content: prompt }];
 
     updateStep("Retrieving API keys...");
-    // Slight delay to make step noticeable
     await new Promise(r => setTimeout(r, 300));
 
     updateStep("Calling AI model...");
@@ -276,7 +295,7 @@ document.getElementById('chatForm').onsubmit = async (e) => {
     const resp = await fetch('https://gpt-api.penguado-web.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages, temperature: 1.0 })
+      body: JSON.stringify({ messages: allMessages, temperature: 1.0 })
     });
 
     updateStep("Retrieving response...");
@@ -287,8 +306,20 @@ document.getElementById('chatForm').onsubmit = async (e) => {
 
     hideOverlay();
 
-    const reply = data?.choices?.[0]?.message?.content || "No reply received.";
-    addMessage('assistant', reply);
+    // Append assistant reply
+    const assistantReply = data?.choices?.[0]?.message?.content || "No reply received.";
+    addMessage('assistant', assistantReply);
+
+    // Update stored history (keep most recent MAX_HISTORY)
+    const newEntry = [
+      { role: 'user', content: prompt },
+      { role: 'assistant', content: assistantReply }
+    ];
+    const updatedHistory = [...history, ...newEntry];
+    if (updatedHistory.length > MAX_HISTORY) {
+      updatedHistory.splice(0, updatedHistory.length - MAX_HISTORY);
+    }
+    saveHistory(updatedHistory);
 
   } catch (err) {
     hideOverlay();
