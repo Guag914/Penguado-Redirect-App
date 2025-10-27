@@ -1,4 +1,4 @@
-# Penguado Redirect App
+# Penguado Gateway
 
 Welcome to the official GitHub repository for the **Penguado Redirect App**, the future home of the upgraded **Penguado** site.
 
